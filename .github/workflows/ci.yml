@@ -1,4 +1,4 @@
-name: CI/CD Minimal Docker Compose
+name: CI Docker Compose (stable)
 
 on:
   push:
@@ -8,26 +8,22 @@ on:
 
 jobs:
   build:
-    name: Build Docker Compose Images
+    name: Build Docker Compose
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:24-dind
-        options: --privileged
 
     steps:
-      # 🔹 Проверка репозитория
+      # 1️⃣ Забираем код
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 🔹 Проверка версии Docker
+      # 2️⃣ Проверяем Docker
       - name: Check Docker version
         run: docker --version
 
-      # 🔹 Установка Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      # 3️⃣ Проверяем Docker Compose
+      - name: Check Docker Compose
+        run: docker compose version
 
-      # 🔹 Сборка образов Docker Compose
+      # 4️⃣ Сборка образов
       - name: Build Docker images
-        run: docker-compose -f docker-compose.yml build --pull
+        run: docker compose build
