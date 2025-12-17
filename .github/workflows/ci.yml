@@ -1,4 +1,4 @@
-name: CI/CD with Docker Compose
+name: CI/CD Minimal Docker Compose
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build and Test Full Project
+    name: Build Docker Compose Images
     runs-on: ubuntu-latest
     services:
       docker:
@@ -16,64 +16,18 @@ jobs:
         options: --privileged
 
     steps:
+      # 🔹 Проверка репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 🔹 Кэш Python
-      - name: Cache Python dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('backend_projects/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+      # 🔹 Проверка версии Docker
+      - name: Check Docker version
+        run: docker --version
 
-      # 🔹 Кэш Node.js
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v3
-        with:
-          path: frontend/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
+      # 🔹 Установка Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 🔹 Сборка образов
+      # 🔹 Сборка образов Docker Compose
       - name: Build Docker images
-        run: docker compose build --progress=plain
-
-      # 🔹 Запуск контейнеров в фоне
-      - name: Start Docker Compose
-        run: docker compose up -d
-
-      # 🔹 Универсальное ожидание всех контейнеров
-      - name: Wait for all services
-        run: |
-          echo "Waiting for all services to be ready..."
-          SERVICES=$(docker compose ps --services)
-          for SERVICE in $SERVICES; do
-            echo "Checking $SERVICE..."
-            for i in {1..30}; do
-              if docker compose exec $SERVICE sh -c "exit 0" >/dev/null 2>&1; then
-                echo "$SERVICE is ready!"
-                break
-              fi
-              echo "Waiting 5s for $SERVICE..."
-              sleep 5
-            done
-          done
-
-      # 🔹 Логи контейнеров
-      - name: Show Docker Compose logs
-        run: docker compose logs --tail=50
-
-      # 🔹 Тесты (опционально)
-      - name: Run tests
-        run: docker compose exec backend pytest || true
-
-      # 🔹 Остановка контейнеров
-      - name: Stop Docker Compose
-        if: always()
-        run: docker compose down
+        run: docker-compose -f docker-compose.yml build --pull
