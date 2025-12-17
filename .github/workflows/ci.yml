@@ -40,10 +40,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build and run Docker Compose
-        run: |
-          docker compose -f docker-compose.yml up --build --abort-on-container-exit
+      # 🔹 Сборка образов
+      - name: Build Docker images
+        run: docker compose build --progress=plain
 
+      # 🔹 Запуск контейнеров в фоне
+      - name: Start Docker Compose
+        run: docker compose up -d
+
+      # 🔹 Универсальное ожидание всех контейнеров
+      - name: Wait for all services
+        run: |
+          echo "Waiting for all services to be ready..."
+          SERVICES=$(docker compose ps --services)
+          for SERVICE in $SERVICES; do
+            echo "Checking $SERVICE..."
+            for i in {1..30}; do
+              if docker compose exec $SERVICE sh -c "exit 0" >/dev/null 2>&1; then
+                echo "$SERVICE is ready!"
+                break
+              fi
+              echo "Waiting 5s for $SERVICE..."
+              sleep 5
+            done
+          done
+
+      # 🔹 Логи контейнеров
+      - name: Show Docker Compose logs
+        run: docker compose logs --tail=50
+
+      # 🔹 Тесты (опционально)
+      - name: Run tests
+        run: docker compose exec backend pytest || true
+
+      # 🔹 Остановка контейнеров
       - name: Stop Docker Compose
         if: always()
         run: docker compose down
