@@ -1,0 +1,11 @@
+{
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "C:\\Dev\\task_manager_project\\backend_projects\\venv\\Scripts\\black.exe",
+    "editor.formatOnSave": true,
+    "python.languageServer": "Pylance",
+    "python.defaultInterpreterPath": "C:\\Dev\\task_manager_project\\backend_projects\\venv\\Scripts\\python.exe"
+}
+
+
+
+

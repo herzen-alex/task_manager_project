@@ -1,0 +1,24 @@
+
+<div class="task-container">
+  <h2>Tasks</h2>
+
+  <div class="add-task">
+    <input [(ngModel)]="newTitle" placeholder="Task title" />
+    <input [(ngModel)]="newDescription" placeholder="Description" />
+    <button (click)="addTask()">Add Task</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let t of tasks">
+      <span [class.done]="t.done">
+        {{ t.title }} - {{ t.description }}
+      </span>
+
+      <button (click)="toggleDone(t)">
+        {{ t.done ? 'Undo' : 'Done' }}
+      </button>
+
+      <button (click)="deleteTask(t)">Delete</button>
+    </li>
+  </ul>
+</div>
