@@ -1,4 +1,4 @@
-name: CI Docker Compose (stable)
+name: CI Docker Compose (Full & Stable)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Docker Compose
+    name: Build, Run & Stop Docker Compose
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,16 @@ jobs:
       # 4️⃣ Сборка образов
       - name: Build Docker images
         run: docker compose build
+
+      # 5️⃣ Запуск сервисов
+      - name: Start Docker Compose services
+        run: docker compose up -d
+
+      # 6️⃣ Вывод логов (важно для дебага)
+      - name: Show Docker Compose logs
+        run: docker compose logs --no-color
+
+      # 7️⃣ Остановка и очистка (всегда!)
+      - name: Stop and clean Docker Compose
+        if: always()
+        run: docker compose down -v --remove-orphans
