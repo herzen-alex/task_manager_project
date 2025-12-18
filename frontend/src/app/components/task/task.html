@@ -1,24 +1,26 @@
 
-<div class="task-container">
-  <h2>Tasks</h2>
+<div class="app">
+  <h1>📝 Task Manager</h1>
 
-  <div class="add-task">
-    <input [(ngModel)]="newTitle" placeholder="Task title" />
+  <div class="task-card add">
+    <input [(ngModel)]="newTitle" placeholder="Title" />
     <input [(ngModel)]="newDescription" placeholder="Description" />
-    <button (click)="addTask()">Add Task</button>
+    <button (click)="addTask()">➕ Add</button>
   </div>
 
-  <ul>
-    <li *ngFor="let t of tasks">
-      <span [class.done]="t.done">
-        {{ t.title }} - {{ t.description }}
-      </span>
+  <div class="task-list">
+    <div class="task-card" *ngFor="let t of tasks" [class.done]="t.done">
+      <div class="text">
+        <h3>{{ t.title }}</h3>
+        <p>{{ t.description }}</p>
+      </div>
 
-      <button (click)="toggleDone(t)">
-        {{ t.done ? 'Undo' : 'Done' }}
-      </button>
-
-      <button (click)="deleteTask(t)">Delete</button>
-    </li>
-  </ul>
+      <div class="actions">
+        <button class="ok" (click)="toggleDone(t)">
+          {{ t.done ? '↩' : '✔' }}
+        </button>
+        <button class="del" (click)="deleteTask(t)">🗑</button>
+      </div>
+    </div>
+  </div>
 </div>
