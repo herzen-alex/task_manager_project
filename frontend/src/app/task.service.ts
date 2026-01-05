@@ -15,8 +15,8 @@ export interface Task {
   description?: string;
   priority?: 'low' | 'medium' | 'urgent';
   status?: 'todo' | 'in-progress' | 'done';
-  createdAt: Date;      // теперь объект Date
-  dueDate?: Date;       // теперь объект Date
+  createdAt: Date;      // jetzt ein Objekt Date
+  dueDate?: Date;       // jetzt ein Objekt Date
   done: boolean;
   subTasks?: SubTask[];
 }
@@ -27,7 +27,7 @@ export interface Task {
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'http://127.0.0.1:5000/tasks'; // твой Flask API
+  private apiUrl = 'http://127.0.0.1:5000/tasks'; // mein Flask API
 
   constructor(private http: HttpClient) {}
 

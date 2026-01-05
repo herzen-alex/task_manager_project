@@ -6,7 +6,6 @@ body {
   min-height: 100vh;
 }
 
-/* маленький overlay для текстуры/шумка */
 body::after {
   content: '';
   position: fixed;

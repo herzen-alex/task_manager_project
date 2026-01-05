@@ -3,17 +3,17 @@
   <h3>{{ task.title }}</h3>
   <p>{{ task.description }}</p>
 
-  <!-- 📅 даты -->
+  <!-- 📅 Datum -->
   <small>🕒 Created: {{ task.createdAt | date:'dd/MM/yyyy' }}</small><br />
   <small *ngIf="task.dueDate">⏰ Due: {{ task.dueDate | date:'dd/MM/yyyy' }}</small>
 
-  <!-- 📊 прогресс -->
+  <!-- 📊 Fortschritt -->
   <div *ngIf="task.subTasks?.length" class="progress-wrapper">
     <small>Progress: {{ progress }}%</small>
     <progress [value]="progress" max="100"></progress>
   </div>
 
-  <!-- ✅ сабтаски -->
+  <!-- ✅ Subtasks -->
   <ul *ngIf="task.subTasks?.length" class="subtask-list">
     <li *ngFor="let sub of task.subTasks">
       <input type="checkbox" [(ngModel)]="sub.done" (change)="updateProgress()" />
@@ -21,7 +21,7 @@
     </li>
   </ul>
 
-  <!-- ➕ добавить сабтаск -->
+  <!-- ➕ Subtask hinzufügen -->
   <div class="subtask-input">
     <input [(ngModel)]="newSubTaskTitle" placeholder="New subtask" />
     <button (click)="addSubTask()">+</button>

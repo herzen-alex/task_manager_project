@@ -13,16 +13,15 @@ import { TaskCard } from '../task-card/task-card';
   templateUrl: './task.html',
   styleUrl: './task.scss',
 })
+
 export class TaskComponent implements OnInit {
   tasks: Task[] = [];
-
   todoTasks: Task[] = [];
   inProgressTasks: Task[] = [];
   doneTasks: Task[] = [];
-
   showCreateTask = false;
 
-  // 🔹 свойства формы создания задачи
+  // 🔹 Eigenschaften des Aufgabenerstellungsformulars
   title: string = '';
   description: string = '';
   priority: 'low' | 'medium' | 'urgent' = 'low';
@@ -50,7 +49,6 @@ export class TaskComponent implements OnInit {
 
   toggleDone(task: Task) {
     task.done = !task.done;
-
     if (task.id) {
       this.taskService.updateTask(task.id, { done: task.done }).subscribe({
         next: () => this.loadTasks()
@@ -60,7 +58,6 @@ export class TaskComponent implements OnInit {
 
   deleteTask(task: Task) {
     if (!task.id) return;
-
     this.taskService.deleteTask(task.id).subscribe(() => {
       this.loadTasks();
     });
@@ -69,14 +66,13 @@ export class TaskComponent implements OnInit {
   openCreateTask() { this.showCreateTask = true; }
   closeCreateTask() { this.showCreateTask = false; }
 
-  // ✅ Создание новой задачи через сервер
+  // ✅ Erstellen einer neuen Task über den Server
   onTaskCreated(task: Task & { subtasks?: { title: string; done: boolean }[] }) {
-    // Добавляем даты и статус
+    // Datum und Status hinzufügen
     task.status = 'todo';
     task.createdAt = new Date();
     if (task.dueDate) task.dueDate = new Date(task.dueDate);
-
-    // Генерим уникальные id для субтасков
+    // Generieren eindeutiger IDs für Subtasks
     if (task.subtasks && task.subtasks.length > 0) {
       task.subTasks = task.subtasks.map(sub => ({
         id: Date.now() + Math.random(),
@@ -84,7 +80,6 @@ export class TaskComponent implements OnInit {
         done: sub.done || false
       }));
     }
-
     this.taskService.addTask(task).subscribe(() => {
       this.loadTasks();
       this.showCreateTask = false;
@@ -95,10 +90,8 @@ export class TaskComponent implements OnInit {
   drop(event: CdkDragDrop<Task[]>, status: 'todo' | 'in-progress' | 'done') {
     const task = event.item.data as Task;
     if (!task || !task.id) return;
-
     const mainTask = this.tasks.find(t => t.id === task.id);
     if (mainTask) mainTask.status = status;
-
     if (event.previousContainer !== event.container) {
       transferArrayItem(
         event.previousContainer.data,
@@ -109,8 +102,7 @@ export class TaskComponent implements OnInit {
     } else {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     }
-
-    // Сохраняем на сервер
+    // Auf dem Server speichern
     this.taskService.updateTask(task.id, { status }).subscribe({
       next: () => {},
       error: () => {

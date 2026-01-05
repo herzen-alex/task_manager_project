@@ -7,14 +7,14 @@
   flex-direction: column;
   gap: 10px;
 
-  &.low { border-left: 4px solid green; }
-  &.medium { border-left: 4px solid orange; }
-  &.urgent { border-left: 4px solid red; }
+  &.low { border-left: 8px solid green; }
+  &.medium { border-left: 8px solid orange; }
+  &.urgent { border-left: 8px solid red; }
 
   &.done { opacity: 0.6; text-decoration: line-through; }
 
-  h3 { margin: 0; font-size: 18px; }
-  p { margin: 0; font-size: 14px; color: #333; }
+  h3 { margin: 0; font-size: 32px; text-align: center; }
+  p { margin: 0; font-size: 24px; color: #333; }
 
   .progress-wrapper {
     display: flex;

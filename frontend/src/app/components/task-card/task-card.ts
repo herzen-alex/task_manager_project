@@ -10,6 +10,7 @@ import { Task, SubTask, TaskService } from '../../task.service';
   templateUrl: './task-card.html',
   styleUrl: './task-card.scss',
 })
+
 export class TaskCard {
   @Input() task!: Task;
 
@@ -20,41 +21,36 @@ export class TaskCard {
 
   constructor(private taskService: TaskService) {}
 
-  // Добавляем новую субтаску
+  // Hinzufügen einer neuen Subtask
   addSubTask() {
     const title = this.newSubTaskTitle.trim();
     if (!title) return;
-
     if (!this.task.subTasks) this.task.subTasks = [];
-
     const sub: SubTask = {
       id: Date.now(),
       title,
       done: false,
     };
-
     this.task.subTasks.push(sub);
     this.newSubTaskTitle = '';
-
     this.saveSubTasks();
   }
 
-  // Обновляем прогресс при изменении чекбокса
+  // Fortschritt aktualisieren, wenn sich das Checkbox ändert
   updateProgress() {
     this.saveSubTasks();
   }
 
-  // Сохраняем субтаски на сервер
+  // Speichern von Subtasks auf dem Server
   private saveSubTasks() {
     if (!this.task.id) return;
-
     this.taskService.updateTask(this.task.id, { subTasks: this.task.subTasks }).subscribe({
       next: () => console.log('Subtasks updated on server'),
       error: () => console.error('Error updating subtasks')
     });
   }
 
-  // Получаем прогресс
+  // Fortschritte machen
   get progress(): number {
     if (!this.task.subTasks || this.task.subTasks.length === 0) return 0;
     const doneCount = this.task.subTasks.filter(s => s.done).length;

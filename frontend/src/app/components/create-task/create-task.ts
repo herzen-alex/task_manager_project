@@ -14,14 +14,14 @@ export class CreateTaskComponent {
   title = '';
   description = '';
   priority: 'low' | 'medium' | 'urgent' = 'low';
-  dueDate: string = ''; // string из <input type="date">
+  dueDate: string = ''; // string aus <input type="date">
 
   subtasks: { title: string; done: boolean }[] = [];
 
   @Output() close = new EventEmitter<void>();
   @Output() created = new EventEmitter<Task>();
 
-  today: string = new Date().toISOString().split('T')[0]; // формат yyyy-MM-dd
+  today: string = new Date().toISOString().split('T')[0]; // Format yyyy-MM-dd
 
   addSubtask() {
     this.subtasks.push({ title: '', done: false });
@@ -33,14 +33,13 @@ export class CreateTaskComponent {
 
   createTask() {
     if (!this.title.trim()) return alert('Title required');
-
     const task: Task = {
       id: Date.now() + Math.random(),
       title: this.title.trim(),
       description: this.description.trim(),
       priority: this.priority,
-      createdAt: new Date(), // дата создания сразу сейчас
-      dueDate: this.dueDate ? new Date(this.dueDate) : undefined, // преобразуем в Date
+      createdAt: new Date(), // Erstellungsdatum gerade jetzt
+      dueDate: this.dueDate ? new Date(this.dueDate) : undefined, // verwandeln в Date
       subTasks: this.subtasks
         .filter(s => s.title.trim() !== '')
         .map<SubTask>(s => ({
@@ -51,10 +50,8 @@ export class CreateTaskComponent {
       done: false,
       status: 'todo',
     };
-
     this.created.emit(task);
-
-    // очистка формы
+    // das Formular löschen
     this.title = '';
     this.description = '';
     this.priority = 'low';

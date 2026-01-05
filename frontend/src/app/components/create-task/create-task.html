@@ -12,14 +12,13 @@
       <option value="urgent">Urgent</option>
     </select>
 
-    <!-- 📅 Дедлайн -->
+    <!-- 📅 Frist -->
     <label>
       Due date:
       <input type="date" [(ngModel)]="dueDate" [min]="today" />
     </label>
 
-
-    <!-- 🔹 Субтаски -->
+    <!-- 🔹 Subtasks -->
     <div class="subtasks">
       <h4>Subtasks</h4>
       <div *ngFor="let sub of subtasks; let i = index" class="subtask">
