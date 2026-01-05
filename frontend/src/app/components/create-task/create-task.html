@@ -1,0 +1,37 @@
+<div class="modal-backdrop">
+  <div class="modal">
+    <h3>Create Task</h3>
+
+    <input [(ngModel)]="title" placeholder="Title" />
+
+    <textarea [(ngModel)]="description" placeholder="Description"></textarea>
+
+    <select [(ngModel)]="priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="urgent">Urgent</option>
+    </select>
+
+    <!-- 📅 Дедлайн -->
+    <label>
+      Due date:
+      <input type="date" [(ngModel)]="dueDate" [min]="today" />
+    </label>
+
+
+    <!-- 🔹 Субтаски -->
+    <div class="subtasks">
+      <h4>Subtasks</h4>
+      <div *ngFor="let sub of subtasks; let i = index" class="subtask">
+        <input [(ngModel)]="sub.title" placeholder="Subtask title" />
+        <button type="button" (click)="removeSubtask(i)">❌</button>
+      </div>
+      <button type="button" (click)="addSubtask()">➕ Add Subtask</button>
+    </div>
+
+    <div class="actions">
+      <button (click)="createTask()">Create</button>
+      <button (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>

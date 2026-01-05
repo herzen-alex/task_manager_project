@@ -1,0 +1,36 @@
+<div class="task-card" [class.done]="task.done" [ngClass]="task.priority">
+
+  <h3>{{ task.title }}</h3>
+  <p>{{ task.description }}</p>
+
+  <!-- 📅 даты -->
+  <small>🕒 Created: {{ task.createdAt | date:'dd/MM/yyyy' }}</small><br />
+  <small *ngIf="task.dueDate">⏰ Due: {{ task.dueDate | date:'dd/MM/yyyy' }}</small>
+
+  <!-- 📊 прогресс -->
+  <div *ngIf="task.subTasks?.length" class="progress-wrapper">
+    <small>Progress: {{ progress }}%</small>
+    <progress [value]="progress" max="100"></progress>
+  </div>
+
+  <!-- ✅ сабтаски -->
+  <ul *ngIf="task.subTasks?.length" class="subtask-list">
+    <li *ngFor="let sub of task.subTasks">
+      <input type="checkbox" [(ngModel)]="sub.done" (change)="updateProgress()" />
+      <span [class.done]="sub.done">{{ sub.title }}</span>
+    </li>
+  </ul>
+
+  <!-- ➕ добавить сабтаск -->
+  <div class="subtask-input">
+    <input [(ngModel)]="newSubTaskTitle" placeholder="New subtask" />
+    <button (click)="addSubTask()">+</button>
+  </div>
+
+  <div class="actions">
+    <button (click)="toggleDone.emit(task)">
+      {{ task.done ? 'Undo' : 'Done' }}
+    </button>
+    <button (click)="delete.emit(task)">Delete</button>
+  </div>
+</div>

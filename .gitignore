@@ -1,0 +1,24 @@
+# Node modules
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+venv/
+myenv/
+instance/
+
+# Logs
+*.log
+*.tmp
+
+# Env
+.env
+
+# IDE
+.idea/
+.vscode/
+*.sublime-workspace

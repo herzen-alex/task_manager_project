@@ -3,12 +3,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface SubTask {
+  id: number;
+  title: string;
+  done: boolean;
+}
+
 export interface Task {
   id?: number;
   title: string;
   description?: string;
-  done?: boolean;
+  priority?: 'low' | 'medium' | 'urgent';
+  status?: 'todo' | 'in-progress' | 'done';
+  createdAt: Date;      // теперь объект Date
+  dueDate?: Date;       // теперь объект Date
+  done: boolean;
+  subTasks?: SubTask[];
 }
+
+
 
 @Injectable({
   providedIn: 'root'

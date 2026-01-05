@@ -1,103 +1,61 @@
-.app {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 20px;
+.task-board {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 h1 {
   text-align: center;
-  color: #fff;
-  margin-bottom: 30px;
+  font-size: 64px;
+  margin-top: 150px;
 }
 
-/* ===== Card ===== */
-.task-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px 20px;
-  margin-bottom: 15px;
+h3 {
+  text-align: center;
+}
+
+.board_btn {
   display: flex;
+  justify-content: space-around;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
+
+  h2 {
+    font-size: 48px;
+  }
 }
 
-.task-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
-
-/* ===== Add Task ===== */
-.task-card.add {
+.column {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.task-card.add input {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-}
-
-.task-card.add button {
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  cursor: pointer;
+/* кнопка добавления */
+button.add-task {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
   font-weight: 600;
-}
-
-.task-card.add button:hover {
-  background: #5a6fd6;
-}
-
-/* ===== Task ===== */
-.text h3 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.text p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #666;
-}
-
-.task-card.done h3,
-.task-card.done p {
-  text-decoration: line-through;
-  color: #aaa;
-}
-
-/* ===== Actions ===== */
-.actions {
-  display: flex;
-  gap: 8px;
-}
-
-.actions button {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
   border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
   cursor: pointer;
-  font-size: 16px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.actions .ok {
-  background: #4caf50;
-  color: white;
+button.add-task:hover {
+  background: linear-gradient(135deg, #764ba2, #667eea);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
 }
 
-.actions .del {
-  background: #f44336;
-  color: white;
-}
-
-.actions button:hover {
-  opacity: 0.85;
+button.add-task:active {
+  transform: translateY(0);
 }

@@ -1,26 +1,45 @@
+<div class="max_width">
+  <div class="app">
+    <h1>📝 Task Manager</h1>
 
-<div class="app">
-  <h1>📝 Task Manager</h1>
+    <div class="board_btn">
+      <h2>BOARD</h2>
+      <button class="add-task" (click)="openCreateTask()">➕ Add Task</button>
+    </div>
 
-  <div class="task-card add">
-    <input [(ngModel)]="newTitle" placeholder="Title" />
-    <input [(ngModel)]="newDescription" placeholder="Description" />
-    <button (click)="addTask()">➕ Add</button>
-  </div>
+    <app-create-task *ngIf="showCreateTask" (close)="closeCreateTask()" (created)="onTaskCreated($event)">
+    </app-create-task>
 
-  <div class="task-list">
-    <div class="task-card" *ngFor="let t of tasks" [class.done]="t.done">
-      <div class="text">
-        <h3>{{ t.title }}</h3>
-        <p>{{ t.description }}</p>
+
+    <div class="task-board">
+      <div class="column" cdkDropList [cdkDropListData]="todoTasks"
+        [cdkDropListConnectedTo]="['inProgressList', 'doneList']" (cdkDropListDropped)="drop($event, 'todo')"
+        id="todoList">
+        <h3>To-Do</h3>
+        <app-task-card *ngFor="let t of todoTasks" cdkDrag [cdkDragData]="t" [task]="t"
+          (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
+        </app-task-card>
       </div>
 
-      <div class="actions">
-        <button class="ok" (click)="toggleDone(t)">
-          {{ t.done ? '↩' : '✔' }}
-        </button>
-        <button class="del" (click)="deleteTask(t)">🗑</button>
+      <div class="column" cdkDropList [cdkDropListData]="inProgressTasks"
+        [cdkDropListConnectedTo]="['todoList', 'doneList']" (cdkDropListDropped)="drop($event, 'in-progress')"
+        id="inProgressList">
+        <h3>In Progress</h3>
+        <app-task-card *ngFor="let t of inProgressTasks" cdkDrag [cdkDragData]="t" [task]="t"
+          (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
+        </app-task-card>
+      </div>
+
+      <div class="column" cdkDropList [cdkDropListData]="doneTasks"
+        [cdkDropListConnectedTo]="['todoList', 'inProgressList']" (cdkDropListDropped)="drop($event, 'done')"
+        id="doneList">
+        <h3>Done</h3>
+        <app-task-card *ngFor="let t of doneTasks" cdkDrag [cdkDragData]="t" [task]="t"
+          (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
+        </app-task-card>
       </div>
     </div>
+
   </div>
+
 </div>
