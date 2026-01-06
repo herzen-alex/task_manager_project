@@ -14,8 +14,13 @@ services:
     build: ./backend_projects
     depends_on:
       - db
+    # Локально можешь иметь backend_projects/.env.docker (он НЕ в git)
     env_file:
       - ./backend_projects/.env.docker
+    # На случай CI (где env_file отсутствует) — подтянет из GitHub Secrets/ENV
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://my_user:blue123@db:5432/task_manager}
+      FLASK_ENV: ${FLASK_ENV:-development}
     ports:
       - "5000:5000"
     volumes:
@@ -34,7 +39,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: >
-      ng serve --host 0.0.0.0 --port 4200 --poll=2000
+      sh -c "ng serve --host 0.0.0.0 --port 4200 --poll=2000"
 
 volumes:
   pgdata:
