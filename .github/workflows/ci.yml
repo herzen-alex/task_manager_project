@@ -12,31 +12,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Забираем код
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Проверяем Docker
       - name: Check Docker version
         run: docker --version
 
-      # 3️⃣ Проверяем Docker Compose
       - name: Check Docker Compose
         run: docker compose version
 
-      # 4️⃣ Сборка образов
+      - name: Create backend .env.docker for CI
+        run: |
+          mkdir -p backend_projects
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > backend_projects/.env.docker
+          echo "FLASK_ENV=${{ secrets.FLASK_ENV }}" >> backend_projects/.env.docker
+
       - name: Build Docker images
         run: docker compose build
 
-      # 5️⃣ Запуск сервисов
       - name: Start Docker Compose services
         run: docker compose up -d
 
-      # 6️⃣ Вывод логов (важно для дебага)
       - name: Show Docker Compose logs
         run: docker compose logs --no-color
 
-      # 7️⃣ Остановка и очистка (всегда!)
       - name: Stop and clean Docker Compose
         if: always()
         run: docker compose down -v --remove-orphans
