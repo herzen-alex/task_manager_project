@@ -47,14 +47,20 @@ export class TaskComponent implements OnInit {
     this.doneTasks = this.tasks.filter(t => t.status === 'done');
   }
 
-  toggleDone(task: Task) {
-    task.done = !task.done;
-    if (task.id) {
-      this.taskService.updateTask(task.id, { done: task.done }).subscribe({
-        next: () => this.loadTasks()
-      });
-    }
+toggleDone(task: Task) {
+  if (!task.done && task.subTasks?.some(s => !s.done)) {
+    return;
   }
+
+  task.done = !task.done;
+
+  if (task.id) {
+    this.taskService.updateTask(task.id, { done: task.done }).subscribe({
+      next: () => this.loadTasks()
+    });
+  }
+}
+
 
   deleteTask(task: Task) {
     if (!task.id) return;

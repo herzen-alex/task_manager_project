@@ -16,7 +16,8 @@ instance/
 *.tmp
 
 # Env
-.env
+.env.docker
+.env.local
 
 # IDE
 .idea/

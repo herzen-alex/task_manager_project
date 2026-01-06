@@ -14,23 +14,37 @@
   </div>
 
   <!-- ✅ Subtasks -->
-  <ul *ngIf="task.subTasks?.length" class="subtask-list">
-    <li *ngFor="let sub of task.subTasks">
-      <input type="checkbox" [(ngModel)]="sub.done" (change)="updateProgress()" />
+  <ul *ngIf="task.subTasks?.length" class="subtask-list" [class.locked]="task.done">
+    <li *ngFor="let sub of task.subTasks; let i = index">
+      <input type="checkbox" [(ngModel)]="sub.done" (change)="updateProgress()" [disabled]="task.done" />
+
       <span [class.done]="sub.done">{{ sub.title }}</span>
+
+      <button class="delete-subtask" (click)="deleteSubTask(i)" [disabled]="task.done" title="Delete subtask">
+        ✖
+      </button>
     </li>
+
   </ul>
 
   <!-- ➕ Subtask hinzufügen -->
-  <div class="subtask-input">
-    <input [(ngModel)]="newSubTaskTitle" placeholder="New subtask" />
-    <button (click)="addSubTask()">+</button>
+  <div class="subtask-input" [class.locked]="task.done">
+    <input [(ngModel)]="newSubTaskTitle" placeholder="New subtask" [disabled]="task.done" />
+    <button (click)="addSubTask()" [disabled]="task.done">+</button>
   </div>
 
   <div class="actions">
-    <button (click)="toggleDone.emit(task)">
-      {{ task.done ? 'Undo' : 'Done' }}
-    </button>
+    <div class="done-wrapper">
+      
+      <button (click)="toggleDone.emit(task)" [disabled]="!canMarkDone">
+        {{ task.done ? 'Undo' : 'Done' }}
+      </button>
+
+      <div class="tooltip" *ngIf="!canMarkDone" role="tooltip" aria-live="polite">
+        Complete all subtasks first
+      </div>
+    </div>
+
     <button (click)="delete.emit(task)">Delete</button>
   </div>
 </div>

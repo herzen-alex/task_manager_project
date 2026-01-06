@@ -2,19 +2,39 @@
   padding: 12px;
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   gap: 10px;
 
-  &.low { border-left: 8px solid green; }
-  &.medium { border-left: 8px solid orange; }
-  &.urgent { border-left: 8px solid red; }
+  &.low {
+    border-left: 8px solid green;
+  }
 
-  &.done { opacity: 0.6; text-decoration: line-through; }
+  &.medium {
+    border-left: 8px solid orange;
+  }
 
-  h3 { margin: 0; font-size: 32px; text-align: center; }
-  p { margin: 0; font-size: 24px; color: #333; }
+  &.urgent {
+    border-left: 8px solid red;
+  }
+
+  &.done {
+    opacity: 0.6;
+    text-decoration: line-through;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  p {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
 
   .progress-wrapper {
     display: flex;
@@ -35,7 +55,10 @@
       align-items: center;
       gap: 6px;
 
-      span.done { text-decoration: line-through; opacity: 0.6; }
+      span.done {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
     }
   }
 
@@ -64,8 +87,15 @@
     display: flex;
     gap: 10px;
 
+    .done-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+    }
+
     button {
       flex: 1;
+      width: 100%;
       padding: 8px;
       border-radius: 6px;
       border: none;
@@ -74,13 +104,83 @@
       transition: all 0.2s ease;
     }
 
-    button:first-child {
+    .done-wrapper button {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
     }
 
+    .done-wrapper button:disabled {
+      opacity: 1;
+      cursor: not-allowed;
+      filter: none;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+    }
+
+    .done-wrapper:hover button:disabled {
+      filter: brightness(1.05);
+    }
+
     button:last-child {
-      background: #e0e0e0;
+      background: linear-gradient(135deg, #e53935, #b71c1c);
+      color: white;
+    }
+
+    button:last-child:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    button:last-child:active {
+      transform: scale(0.98);
     }
   }
+}
+
+button.delete-subtask {
+  background: transparent;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: auto;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.done-wrapper:hover .tooltip {
+  opacity: 1;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
 }

@@ -11,7 +11,8 @@ myenv/
 instance/
 
 # Environment
-.env
+.env.docker
+.env.local
 
 # Logs
 *.log

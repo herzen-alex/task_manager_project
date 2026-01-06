@@ -19,10 +19,17 @@ export class TaskCard {
 
   newSubTaskTitle: string = '';
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService) { }
+
+  get canMarkDone(): boolean {
+    if (this.task.done) return true;
+    if (!this.task.subTasks || this.task.subTasks.length === 0) return true;
+    return this.task.subTasks.every(sub => sub.done);
+  }
 
   // Hinzufügen einer neuen Subtask
   addSubTask() {
+    if (this.task.done) return;
     const title = this.newSubTaskTitle.trim();
     if (!title) return;
     if (!this.task.subTasks) this.task.subTasks = [];
@@ -38,8 +45,10 @@ export class TaskCard {
 
   // Fortschritt aktualisieren, wenn sich das Checkbox ändert
   updateProgress() {
+    if (this.task.done) return;
     this.saveSubTasks();
   }
+
 
   // Speichern von Subtasks auf dem Server
   private saveSubTasks() {
@@ -56,4 +65,12 @@ export class TaskCard {
     const doneCount = this.task.subTasks.filter(s => s.done).length;
     return Math.round((doneCount / this.task.subTasks.length) * 100);
   }
+
+  deleteSubTask(index: number) {
+    if (this.task.done) return;
+    if (!this.task.subTasks) return;
+    this.task.subTasks.splice(index, 1);
+    this.saveSubTasks();
+  }
+
 }

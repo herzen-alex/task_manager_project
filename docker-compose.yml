@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16
@@ -8,7 +6,7 @@ services:
       POSTGRES_PASSWORD: blue123
       POSTGRES_DB: task_manager
     ports:
-      - "5432:5432"  # Оставляешь, если хочешь подключаться из IDE/pgAdmin
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -16,13 +14,12 @@ services:
     build: ./backend_projects
     depends_on:
       - db
-    environment:
-      DATABASE_URL: postgresql://my_user:blue123@db:5432/task_manager
-      FLASK_ENV: development
+    env_file:
+      - ./backend_projects/.env.docker
     ports:
       - "5000:5000"
     volumes:
-      - ./backend_projects:/app  # live reload
+      - ./backend_projects:/app
     command: >
       sh -c "while ! nc -z db 5432; do echo 'Waiting for DB...'; sleep 1; done;
              flask run --host=0.0.0.0 --reload"
@@ -37,10 +34,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: >
-      ng serve
-      --host 0.0.0.0
-      --port 4200
-      --poll=2000
+      ng serve --host 0.0.0.0 --port 4200 --poll=2000
 
 volumes:
   pgdata:
