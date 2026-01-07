@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    name: Build, Run & Stop Docker Compose
+    name: Build, Run, Test & Stop Docker Compose
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +25,45 @@ jobs:
       - name: Check Docker Compose
         run: docker compose version
 
+      # ✅ В CI создаём env-файл, чтобы не зависеть от secrets на PR
       - name: Create backend .env.docker for CI
         run: |
           mkdir -p backend_projects
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > backend_projects/.env.docker
-          echo "FLASK_ENV=${{ secrets.FLASK_ENV }}" >> backend_projects/.env.docker
+          cat > backend_projects/.env.docker << 'EOF'
+          FLASK_ENV=production
+          DATABASE_URL=postgresql://my_user:blue123@db:5432/task_manager
+          EOF
 
       - name: Build Docker images
-        run: docker compose build
+        run: docker compose build --pull
 
       - name: Start Docker Compose services
         run: docker compose up -d
 
+      - name: Show containers
+        run: docker compose ps
+
+      # ✅ Ждём backend
+      - name: Wait for backend (/health)
+        run: |
+          for i in {1..45}; do
+            if curl -fsS http://localhost:5000/health >/dev/null 2>&1; then
+              echo "Backend is ready ✅"
+              exit 0
+            fi
+            echo "Waiting for backend... ($i/45)"
+            sleep 2
+          done
+          echo "Backend did not become ready ❌"
+          docker compose logs --no-color
+          exit 1
+
+      # ✅ Smoke test
+      - name: Smoke test /health
+        run: curl -i http://localhost:5000/health
+
       - name: Show Docker Compose logs
+        if: always()
         run: docker compose logs --no-color
 
       - name: Stop and clean Docker Compose

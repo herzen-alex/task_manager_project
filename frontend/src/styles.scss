@@ -28,8 +28,17 @@ body::after {
   padding-right: 16px;
 }
 
+.center {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+
+

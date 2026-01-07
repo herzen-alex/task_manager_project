@@ -1,0 +1,40 @@
+<div class="max_width center">
+    <div class="auth">
+        <h1 class="auth__title">Create account</h1>
+
+        <form class="auth__form" (ngSubmit)="submit()">
+            <label class="field">
+                <span class="field__label">Name</span>
+                <input class="field__input" [(ngModel)]="model.name" name="name" autocomplete="name" />
+            </label>
+
+            <label class="field">
+                <span class="field__label">Email</span>
+                <input class="field__input" [(ngModel)]="model.email" name="email" type="email" autocomplete="email" />
+            </label>
+
+            <label class="field">
+                <span class="field__label">Password</span>
+                <input class="field__input" [(ngModel)]="model.password" name="password" type="password"
+                    autocomplete="new-password" />
+            </label>
+
+            <label class="field">
+                <span class="field__label">Confirm password</span>
+                <input class="field__input" [(ngModel)]="model.confirmPassword" name="confirmPassword" type="password"
+                    autocomplete="new-password" />
+            </label>
+
+            <p class="auth__error" *ngIf="error">{{ error }}</p>
+
+            <button class="btn btn-primary" type="submit">
+                Sign up
+            </button>
+
+            <!-- Вторая кнопка такая же -->
+            <button class="btn btn-primary" type="button" (click)="goToLogin()">
+                Log in
+            </button>
+        </form>
+    </div>
+</div>

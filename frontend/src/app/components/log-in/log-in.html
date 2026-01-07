@@ -1,1 +1,53 @@
-<p>log-in works!</p>
+<div class="max_width center">
+    <div class="auth">
+        <h1 class="auth__title">Log in</h1>
+
+        <form class="auth__form" [formGroup]="form" (ngSubmit)="submit()">
+            <label class="field">
+                <span class="field__label">Email</span>
+                <input class="field__input" formControlName="email" type="email" autocomplete="email" />
+                <small class="field__error" *ngIf="f.email.touched && f.email.errors?.['required']">
+                    Email is required
+                </small>
+                <small class="field__error" *ngIf="f.email.touched && f.email.errors?.['email']">
+                    Enter a valid email
+                </small>
+            </label>
+
+            <label class="field">
+                <span class="field__label">Password</span>
+
+                <div class="pw">
+                    <input class="field__input" formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                        autocomplete="current-password" />
+                    <button type="button" class="pw__btn btn btn-primary" (click)="togglePassword()">
+                        {{ showPassword ? 'Hide' : 'Show' }}
+                    </button>
+
+                </div>
+
+                <small class="field__error" *ngIf="f.password.touched && f.password.errors?.['required']">
+                    Password is required
+                </small>
+                <small class="field__error" *ngIf="f.password.touched && f.password.errors?.['minlength']">
+                    Min 6 characters
+                </small>
+            </label>
+
+            <label class="check">
+                <input class="check__box" type="checkbox" formControlName="remember" />
+                <span class="check__text">Remember me</span>
+            </label>
+
+            <p class="auth__error" *ngIf="error">{{ error }}</p>
+
+            <button class="btn btn-primary" type="submit" [disabled]="loading || form.invalid">
+                {{ loading ? 'Logging in...' : 'Log in' }}
+            </button>
+
+            <button class="btn btn-primary" type="button" (click)="goToRegister()">
+                Create one
+            </button>
+        </form>
+    </div>
+</div>
