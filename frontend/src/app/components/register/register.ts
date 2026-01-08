@@ -34,12 +34,10 @@ export class Register {
 
   submit() {
     this.error = '';
-
     const name = this.model.name.trim();
     const email = this.model.email.trim().toLowerCase();
     const password = this.model.password;
     const confirm = this.model.confirmPassword;
-
     if (!name || !email || !password || !confirm) {
       this.error = 'Please fill in all fields.';
       return;
@@ -62,13 +60,10 @@ export class Register {
     this.auth.register({ name, email, password }).subscribe({
       next: () => {
         this.loading = false;
-        // после успешной регистрации -> на логин
         this.router.navigate(['/']);
       },
       error: (err) => {
         this.loading = false;
-
-        // красивое сообщение
         const msg =
           err?.error?.message ||
           (err?.status === 409 ? 'Email already exists.' : 'Registration failed.');

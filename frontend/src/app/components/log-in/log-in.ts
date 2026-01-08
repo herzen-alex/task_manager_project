@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth.service'; // поправь путь под свой проект
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-log-in',
@@ -33,28 +33,25 @@ export class LogIn {
   get f() { return this.form.controls; }
 
   submit() {
+    if (this.form.invalid || this.loading) return;
     this.error = '';
-    this.form.markAllAsTouched();
-    if (this.form.invalid) return;
-
     this.loading = true;
-
-    const email = this.f.email.value!.trim().toLowerCase();
-    const password = this.f.password.value!;
-
+    const email = (this.form.get('email')?.value ?? '').toString().trim();
+    const password = (this.form.get('password')?.value ?? '').toString();
     this.auth.login({ email, password }).subscribe({
-      next: (user) => {
-        // user уже сохранён в localStorage внутри AuthService (tap)
-        // на всякий: убираем старый мок-ключ
-        localStorage.removeItem('auth');
-
+      next: () => {
         this.loading = false;
-        this.router.navigate(['/main']);
+        this.router.navigate(['/app/main']);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error?.message || 'Login failed';
-      }
+        console.warn('Login failed', err);
+        if (err.status === 401) {
+          this.error = 'Wrong email or password.';
+        } else {
+          this.error = 'Login failed. Please try again.';
+        }
+      },
     });
   }
 
@@ -65,4 +62,16 @@ export class LogIn {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
+
+  loginAsGuest() {
+    if (this.loading) return;
+    this.error = '';
+    this.form.patchValue({
+      email: 'guest@example.com',
+      password: 'guest123',
+      remember: false,
+    });
+    this.submit();
+  }
+
 }

@@ -1,0 +1,120 @@
+.contacts-page {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Верхняя панель */
+.contacts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.contacts-header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* Кнопка добавления */
+.add-contact-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  color: #f9fafb;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.add-contact-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.5);
+}
+
+/* Список */
+.contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Карточка контакта — наш mini profile */
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.5);
+}
+
+/* Аватар */
+.contact-card .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* Инфо */
+.contact-info {
+  flex: 1;
+  min-width: 0; // если будут длинные e-mail'ы
+}
+
+.contact-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.contact-email {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.contact-meta {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* Кнопки действий */
+.contact-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.icon-btn.danger {
+  color: #f87171;
+}

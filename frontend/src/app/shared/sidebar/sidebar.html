@@ -1,0 +1,56 @@
+<nav class="sidebar">
+  <!-- Верх -->
+  <div class="sidebar-top">
+    <div class="logo-circle">TM</div>
+    <div class="app-title">
+      <div class="app-name">Task Manager</div>
+      <div class="app-subtitle">Stay organized</div>
+    </div>
+  </div>
+
+  <!-- Основное меню -->
+  <div class="sidebar-main">
+    <div class="nav-item" routerLink="/app/main" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <span class="nav-icon">✅</span>
+      <span class="nav-label">Tasks</span>
+    </div>
+
+    <div class="nav-item" routerLink="/app/contacts" routerLinkActive="active">
+      <span class="nav-icon">👥</span>
+      <span class="nav-label">Contacts</span>
+    </div>
+
+    <div class="nav-item" routerLink="/app/notes" routerLinkActive="active">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">Notes</span>
+    </div>
+
+    <div class="nav-item" routerLink="/app/settings" routerLinkActive="active">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+
+  <!-- SECONDARY MENU -->
+  <div class="sidebar-secondary">
+
+    <div class="secondary-title">Info</div>
+
+    <div class="nav-item small" routerLink="/app/datenschutz" routerLinkActive="active">
+      <span class="nav-icon">🔒</span>
+      <span class="nav-label">Datenschutz</span>
+    </div>
+
+    <div class="nav-item small" routerLink="/app/impressum" routerLinkActive="active">
+      <span class="nav-icon">📄</span>
+      <span class="nav-label">Impressum</span>
+    </div>
+
+  </div>
+
+  <!-- Низ: пользователь -->
+  <div class="sidebar-bottom">
+    <span class="user-label">Logged in as</span>
+    <span class="user-name">Alex</span>
+  </div>
+</nav>

@@ -1,0 +1,37 @@
+
+<div class="contacts-page">
+  <div class="contacts-header">
+    <div>
+      <h1>Contacts</h1>
+      <p class="subtitle">Manage people you work with</p>
+    </div>
+
+    <button class="add-contact-btn">
+      + Add contact
+    </button>
+  </div>
+
+  <div class="contacts-list">
+    <div class="contact-card" *ngFor="let c of contacts">
+      <div class="avatar">
+        {{ c.name.charAt(0) | uppercase }}
+      </div>
+
+      <div class="contact-info">
+        <div class="contact-name">{{ c.name }}</div>
+        <div class="contact-email">{{ c.email }}</div>
+        <div class="contact-meta" *ngIf="c.phone || c.role">
+          <span *ngIf="c.role">{{ c.role }}</span>
+          <span *ngIf="c.phone">• {{ c.phone }}</span>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <button class="icon-btn" (click)="editContact(c)">✏️</button>
+        <button class="icon-btn danger" (click)="deleteContact(c)">🗑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,32 @@
+.legal-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+/* Заголовки только внутри legal-container */
+.legal-container h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.legal-container h2 {
+  margin-top: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.legal-container p,
+.legal-container ul {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.legal-container ul {
+  padding-left: 20px;
+}

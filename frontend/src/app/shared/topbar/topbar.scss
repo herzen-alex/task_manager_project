@@ -1,0 +1,41 @@
+.topbar {
+  height: 60px;
+  background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%, #020617 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 24px;
+  border-bottom: 1px solid #1d4ed8;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.logout {
+  background: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #dc2626;
+  }
+}
+
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.username {
+  font-size: 16px;
+  opacity: 0.9;
+}

@@ -23,7 +23,6 @@
                     <button type="button" class="pw__btn btn btn-primary" (click)="togglePassword()">
                         {{ showPassword ? 'Hide' : 'Show' }}
                     </button>
-
                 </div>
 
                 <small class="field__error" *ngIf="f.password.touched && f.password.errors?.['required']">
@@ -47,6 +46,10 @@
 
             <button class="btn btn-primary" type="button" (click)="goToRegister()">
                 Create one
+            </button>
+
+            <button class="btn btn-primary" type="button" (click)="loginAsGuest()">
+                Log in as Guest
             </button>
         </form>
     </div>
