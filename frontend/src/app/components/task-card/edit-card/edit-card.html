@@ -2,20 +2,19 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title-block">
-        <div class="modal-icon">✨</div>
+        <div class="modal-icon">✏️</div>
         <div>
-          <h3>Create Task</h3>
+          <h3>Edit Task</h3>
           <p class="modal-subtitle">
-            Create a new task and keep your workflow organized.
+            Update task details and keep everything in sync.
           </p>
         </div>
       </div>
 
-      <button class="close-btn" (click)="closeModal()">✕</button>
+      <button class="close-btn" (click)="onCancel()">✕</button>
     </div>
 
     <div class="modal-body">
-
       <input [(ngModel)]="title" placeholder="Title" />
 
       <textarea [(ngModel)]="description" placeholder="Description"></textarea>
@@ -36,17 +35,30 @@
 
         <div *ngFor="let sub of subtasks; let i = index" class="subtask">
           <input [(ngModel)]="sub.title" placeholder="Subtask title" />
-          <button type="button" class="delete-sub" (click)="removeSubtask(i)">✖</button>
+          <button
+            type="button"
+            class="delete-sub"
+            (click)="removeSubtask(i)"
+            title="Delete subtask"
+          >
+            ✖
+          </button>
         </div>
 
-        <button type="button" class="add-sub" (click)="addSubtask()">➕ Add Subtask</button>
+        <button type="button" class="add-sub" (click)="addSubtask()">
+          ➕ Add Subtask
+        </button>
       </div>
-
     </div>
 
     <div class="modal-footer">
-      <button class="btn secondary" (click)="closeModal()">Cancel</button>
-      <button class="btn primary" (click)="createTask()">Create</button>
+      <button class="btn secondary" type="button" (click)="onCancel()">
+        Cancel
+      </button>
+      <button class="btn primary" type="button" (click)="onSave()">
+        Save
+      </button>
     </div>
   </div>
 </div>
+

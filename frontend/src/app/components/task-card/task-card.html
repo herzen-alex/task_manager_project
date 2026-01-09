@@ -1,13 +1,23 @@
 <div class="task-card" [class.done]="task.done" [ngClass]="task.priority">
 
-  <h3>{{ task.title }}</h3>
-  <p>{{ task.description }}</p>
+  <div class="task-header">
+    <div class="task-title-row">
+      <h3>{{ task.title }}</h3>
 
-  <!-- 📅 Datum -->
-  <small>🕒 Created: {{ task.createdAt | date:'dd/MM/yyyy' }}</small><br />
-  <small *ngIf="task.dueDate">⏰ Due: {{ task.dueDate | date:'dd/MM/yyyy' }}</small>
+      <span class="priority-badge" [ngClass]="task.priority">
+        {{ task.priority === 'low' ? 'Low' : task.priority === 'medium' ? 'Medium' : 'Urgent' }}
+      </span>
+    </div>
 
-  <!-- 📊 Fortschritt -->
+    <div class="task-meta">
+      <small>🕒 Created: {{ task.createdAt | date:'dd/MM/yyyy' }}</small>
+      <small *ngIf="task.dueDate">⏰ Due: {{ task.dueDate | date:'dd/MM/yyyy' }}</small>
+    </div>
+  </div>
+
+  <p class="task-desc">{{ task.description }}</p>
+
+  <!-- 📊 Progress -->
   <div *ngIf="task.subTasks?.length" class="progress-wrapper">
     <small>Progress: {{ progress }}%</small>
     <progress [value]="progress" max="100"></progress>
@@ -17,14 +27,12 @@
   <ul *ngIf="task.subTasks?.length" class="subtask-list" [class.locked]="task.done">
     <li *ngFor="let sub of task.subTasks; let i = index">
       <input type="checkbox" [(ngModel)]="sub.done" (change)="updateProgress()" [disabled]="task.done" />
-
       <span [class.done]="sub.done">{{ sub.title }}</span>
 
       <button class="delete-subtask" (click)="deleteSubTask(i)" [disabled]="task.done" title="Delete subtask">
         ✖
       </button>
     </li>
-
   </ul>
 
   <!-- ➕ Subtask hinzufügen -->
@@ -33,9 +41,9 @@
     <button (click)="addSubTask()" [disabled]="task.done">+</button>
   </div>
 
+  <!-- 🔘 Actions -->
   <div class="actions">
     <div class="done-wrapper">
-      
       <button (click)="toggleDone.emit(task)" [disabled]="!canMarkDone">
         {{ task.done ? 'Undo' : 'Done' }}
       </button>
@@ -45,6 +53,18 @@
       </div>
     </div>
 
-    <button (click)="delete.emit(task)">Delete</button>
+    <div class="icon-actions">
+      <button type="button" class="icon-btn" (click)="openEdit()" title="Edit task" [disabled]="task.done">
+        ✏️
+      </button>
+
+      <button type="button" class="icon-btn danger" (click)="delete.emit(task)" title="Delete task">
+        🗑
+      </button>
+    </div>
   </div>
+
+  <!-- ✨ Modal редактирования -->
+  <app-edit-card *ngIf="isEditing" [task]="task" (close)="closeEdit()" (updated)="onTaskUpdated($event)">
+  </app-edit-card>
 </div>

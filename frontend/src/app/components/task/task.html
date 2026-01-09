@@ -4,7 +4,7 @@
 
     <div class="board_btn">
       <h2>BOARD</h2>
-      <button class="add-task" (click)="openCreateTask()">➕ Add Task</button>
+      <button class="add-task" (click)="openCreateTask()">✨ Add task</button>
     </div>
 
     <app-create-task *ngIf="showCreateTask" (close)="closeCreateTask()" (created)="onTaskCreated($event)">

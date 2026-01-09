@@ -1,0 +1,105 @@
+<div class="modal-backdrop" *ngIf="isOpen && draft">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title-block">
+                <div class="modal-icon">
+                    {{ isAdding ? '✨' : '✏️' }}
+                </div>
+                <div>
+                    <h2>{{ isAdding ? 'Add new contact' : 'Edit contact' }}</h2>
+                    <p class="modal-subtitle">
+                        {{
+                        isAdding
+                        ? 'Create a new contact to keep your network organized.'
+                        : 'Update contact information and keep it up to date.'
+                        }}
+                    </p>
+                </div>
+            </div>
+
+            <button class="close-btn" (click)="onCancel()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="error-box" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+
+            <!-- Аватар превью -->
+            <div class="modal-avatar">
+                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(draft.name) }">
+                    {{ draft.name.trim() ? (draft.name.trim()[0] | uppercase) : '?' }}
+                </div>
+            </div>
+
+            <!-- Поля формы -->
+            <label class="field">
+                <span>Name</span>
+                <input [(ngModel)]="draft.name" placeholder="Full name" (input)="errorMessage = ''" />
+            </label>
+
+            <label class="field">
+                <span>E-Mail</span>
+                <input [(ngModel)]="draft.email" type="email" placeholder="email@example.com"
+                    (input)="errorMessage = ''" />
+            </label>
+
+            <label class="field">
+                <span>Phone</span>
+                <input [(ngModel)]="draft.phone" placeholder="+49 ..." />
+            </label>
+
+            <label class="field">
+                <span>Role</span>
+                <input [(ngModel)]="draft.role" placeholder="e.g. Frontend Developer" />
+            </label>
+
+            <label class="field">
+                <span>Company</span>
+                <input [(ngModel)]="draft.company" placeholder="Company name" />
+            </label>
+
+            <!-- Preview карточки -->
+            <div class="preview-label">
+                Preview
+            </div>
+
+            <div class="contact-card preview">
+                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(draft.name) }">
+                    {{ draft.name.trim() ? (draft.name.trim()[0] | uppercase) : '?' }}
+                </div>
+
+                <div class="contact-info">
+                    <div class="contact-name">
+                        {{ draft.name || 'Contact name' }}
+                    </div>
+                    <div class="contact-email">
+                        {{ draft.email || 'email@example.com' }}
+                    </div>
+
+                    <div class="contact-meta" *ngIf="draft.role || draft.company || draft.phone">
+
+                        <!-- строка 1 — роль -->
+                        <div class="meta-line" *ngIf="draft.role">
+                            {{ draft.role }}
+                        </div>
+
+                        <!-- строка 2 — компания + телефон -->
+                        <div class="meta-line" *ngIf="draft.company || draft.phone">
+                            <span *ngIf="draft.company">{{ draft.company }}</span>
+                            <span *ngIf="draft.company && draft.phone">•</span>
+                            <span *ngIf="draft.phone">{{ draft.phone }}</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn secondary" (click)="onCancel()">Cancel</button>
+            <button class="btn primary" (click)="onSave()">Save</button>
+        </div>
+    </div>
+</div>

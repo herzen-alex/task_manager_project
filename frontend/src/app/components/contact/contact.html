@@ -1,4 +1,3 @@
-
 <div class="contacts-page">
   <div class="contacts-header">
     <div>
@@ -6,32 +5,37 @@
       <p class="subtitle">Manage people you work with</p>
     </div>
 
-    <button class="add-contact-btn">
+    <button class="add-contact-btn" (click)="openAdd()">
       + Add contact
     </button>
   </div>
 
   <div class="contacts-list">
     <div class="contact-card" *ngFor="let c of contacts">
-      <div class="avatar">
-        {{ c.name.charAt(0) | uppercase }}
+      <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(c.name) }">
+        {{ getInitial(c.name) }}
       </div>
 
       <div class="contact-info">
         <div class="contact-name">{{ c.name }}</div>
         <div class="contact-email">{{ c.email }}</div>
-        <div class="contact-meta" *ngIf="c.phone || c.role">
+
+        <div class="contact-meta" *ngIf="c.role || c.company || c.phone">
           <span *ngIf="c.role">{{ c.role }}</span>
-          <span *ngIf="c.phone">• {{ c.phone }}</span>
+          <span *ngIf="c.role && (c.company || c.phone)">•</span>
+          <span *ngIf="c.company">{{ c.company }}</span>
+          <span *ngIf="(c.role || c.company) && c.phone">•</span>
+          <span *ngIf="c.phone">{{ c.phone }}</span>
         </div>
       </div>
 
       <div class="contact-actions">
-        <button class="icon-btn" (click)="editContact(c)">✏️</button>
+        <button class="icon-btn" (click)="openEdit(c)">✏️</button>
         <button class="icon-btn danger" (click)="deleteContact(c)">🗑</button>
       </div>
     </div>
   </div>
 </div>
 
-
+<app-edit-modal [isOpen]="isModalOpen" [isAdding]="isAdding" [contact]="editingContact" (cancel)="onCancelModal()"
+  (save)="onSaveModal($event)"></app-edit-modal>

@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models import db, Task, User
+from .models import db, Task, User, Contact  # 👈 добавили Contact
 
 load_dotenv()
 
@@ -61,6 +61,25 @@ def create_app():
                 "name": t.user.name,
                 "email": t.user.email,
             } if t.user else None,
+        }
+
+    def _serialize_contact(c: Contact):
+        return {
+            "id": c.id,
+            "name": c.name,
+            "email": c.email,
+            "phone": c.phone,
+            "company": c.company,
+            "position": c.position,
+            "avatarColor": c.avatar_color,
+            "createdAt": c.created_at.isoformat() if c.created_at else None,
+            "updatedAt": c.updated_at.isoformat() if c.updated_at else None,
+            "userId": c.user_id,
+            "user": {
+                "id": c.user.id,
+                "name": c.user.name,
+                "email": c.user.email,
+            } if c.user else None,
         }
 
     def _parse_due_date(value):
@@ -137,14 +156,14 @@ def create_app():
         }), 200
 
     # -----------------------------
-    # GET: все задачи (пока общая доска)
+    # TASKS: GET — все задачи (пока общая доска)
     @app.route("/tasks", methods=["GET"])
     def get_tasks():
         tasks = Task.query.order_by(Task.created_at.desc()).all()
         return jsonify([_serialize_task(t) for t in tasks]), 200
 
     # -----------------------------
-    # POST: создать задачу (нужен X-User-Id)
+    # TASKS: POST — создать задачу (нужен X-User-Id)
     @app.route("/tasks", methods=["POST"])
     def add_task():
         user_id = _get_user_id()
@@ -175,7 +194,7 @@ def create_app():
         return jsonify(_serialize_task(task)), 201
 
     # -----------------------------
-    # PUT: обновить задачу
+    # TASKS: PUT — обновить задачу
     @app.route("/tasks/<int:task_id>", methods=["PUT"])
     def update_task(task_id):
         user_id = _get_user_id()
@@ -215,7 +234,7 @@ def create_app():
         return jsonify(_serialize_task(task)), 200
 
     # -----------------------------
-    # DELETE: удалить задачу
+    # TASKS: DELETE — удалить задачу
     @app.route("/tasks/<int:task_id>", methods=["DELETE"])
     def delete_task(task_id):
         user_id = _get_user_id()
@@ -228,4 +247,106 @@ def create_app():
 
         return jsonify({"message": "Task deleted"}), 200
 
+    # -----------------------------
+    # CONTACTS: GET — список контактов
+    @app.route("/contacts", methods=["GET"])
+    def get_contacts():
+        # пока без фильтра по пользователю, общая адресная книга
+        contacts = Contact.query.order_by(Contact.name.asc()).all()
+        return jsonify([_serialize_contact(c) for c in contacts]), 200
+
+    # -----------------------------
+    # CONTACTS: GET — один контакт по id
+    @app.route("/contacts/<int:contact_id>", methods=["GET"])
+    def get_contact(contact_id):
+        contact = Contact.query.get_or_404(contact_id)
+        return jsonify(_serialize_contact(contact)), 200
+
+    # -----------------------------
+    # CONTACTS: POST — создать контакт (нужен X-User-Id)
+    @app.route("/contacts", methods=["POST"])
+    def create_contact():
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        data = request.get_json() or {}
+
+        name = (data.get("name") or "").strip()
+        email = (data.get("email") or "").strip()
+
+        if not name or not email:
+            return jsonify({"message": "Name and email are required"}), 400
+
+        contact = Contact(
+            user_id=user_id,
+            name=name,
+            email=email,
+            phone=(data.get("phone") or "").strip() or None,
+            company=(data.get("company") or "").strip() or None,
+            position=(data.get("position") or "").strip() or None,
+            avatar_color=data.get("avatarColor") or None,
+        )
+
+        db.session.add(contact)
+        db.session.commit()
+
+        contact = Contact.query.get(contact.id)
+        return jsonify(_serialize_contact(contact)), 201
+
+    # -----------------------------
+    # CONTACTS: PUT — обновить контакт
+    @app.route("/contacts/<int:contact_id>", methods=["PUT"])
+    def update_contact(contact_id):
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        contact = Contact.query.get_or_404(contact_id)
+        data = request.get_json() or {}
+
+        if "name" in data:
+            new_name = (data.get("name") or "").strip()
+            if not new_name:
+                return jsonify({"message": "Name cannot be empty"}), 400
+            contact.name = new_name
+
+        if "email" in data:
+            new_email = (data.get("email") or "").strip()
+            if not new_email:
+                return jsonify({"message": "Email cannot be empty"}), 400
+            contact.email = new_email
+
+        if "phone" in data:
+            contact.phone = (data.get("phone") or "").strip() or None
+
+        if "company" in data:
+            contact.company = (data.get("company") or "").strip() or None
+
+        if "position" in data:
+            contact.position = (data.get("position") or "").strip() or None
+
+        if "avatarColor" in data:
+            contact.avatar_color = data.get("avatarColor") or None
+
+        db.session.commit()
+
+        contact = Contact.query.get(contact.id)
+        return jsonify(_serialize_contact(contact)), 200
+
+    # -----------------------------
+    # CONTACTS: DELETE — удалить контакт
+    @app.route("/contacts/<int:contact_id>", methods=["DELETE"])
+    def delete_contact(contact_id):
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        contact = Contact.query.get_or_404(contact_id)
+        db.session.delete(contact)
+        db.session.commit()
+
+        return jsonify({"message": "Contact deleted"}), 200
+
     return app
+

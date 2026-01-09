@@ -30,6 +30,11 @@ export class TaskComponent implements OnInit {
 
   constructor(private taskService: TaskService) { }
 
+  trackByTaskId(index: number, task: Task): string | number {
+    return task.id ?? index;
+  }
+
+
   ngOnInit() {
     this.loadTasks();
   }
@@ -47,19 +52,24 @@ export class TaskComponent implements OnInit {
     this.doneTasks = this.tasks.filter(t => t.status === 'done');
   }
 
-toggleDone(task: Task) {
-  if (!task.done && task.subTasks?.some(s => !s.done)) {
-    return;
-  }
+  toggleDone(task: Task) {
+    // нельзя завершать, если есть незавершённые subtasks
+    if (!task.done && task.subTasks?.some(s => !s.done)) {
+      return;
+    }
 
-  task.done = !task.done;
+    const newDone = !task.done;
+    task.done = newDone;
 
-  if (task.id) {
-    this.taskService.updateTask(task.id, { done: task.done }).subscribe({
-      next: () => this.loadTasks()
-    });
+    if (task.id) {
+      this.taskService.updateTask(task.id, { done: newDone }).subscribe({
+        error: () => {
+          // откат, если сервер не принял
+          task.done = !newDone;
+        }
+      });
+    }
   }
-}
 
 
   deleteTask(task: Task) {
@@ -110,7 +120,7 @@ toggleDone(task: Task) {
     }
     // Auf dem Server speichern
     this.taskService.updateTask(task.id, { status }).subscribe({
-      next: () => {},
+      next: () => { },
       error: () => {
         if (mainTask) {
           mainTask.status = event.previousContainer.id as any;

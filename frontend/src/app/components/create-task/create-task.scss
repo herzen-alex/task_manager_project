@@ -8,129 +8,192 @@
   z-index: 1000;
 }
 
+/* ===== Modal Card (light version of Contacts style) ===== */
 .modal {
   background: #ffffff;
-  padding: 24px;
-  border-radius: 14px;
-  width: 360px;
+  padding: 22px;
+  width: 420px;
   max-width: calc(100vw - 32px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
-
-  h3 {
-    margin: 0 0 10px;
-    text-align: center;
-    font-size: 22px;
-  }
+  gap: 16px;
 }
 
-/* inputs */
+/* ===== Header ===== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-title-block {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  margin-top: 2px;
+  color: #6b7280;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.65;
+  font-size: 20px;
+  transition: 0.15s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+/* ===== Body ===== */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Inputs (same as Contacts modal but light theme) */
 .modal input,
 .modal textarea,
 .modal select {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  background: rgba(255, 255, 255, 0.8);
   font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  box-sizing: border-box;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
-}
-
-
-.modal textarea {
-  resize: vertical;
-  min-height: 80px;
+  transition: 0.15s ease;
 }
 
 .modal input:focus,
 .modal textarea:focus,
 .modal select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
 }
 
-/* date label */
-.modal label {
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.date-field {
   display: flex;
   flex-direction: column;
+  gap: 4px;
   font-size: 13px;
-  gap: 6px;
-  color: #555;
+  color: #6b7280;
 }
 
-/* actions */
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.actions button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-/* Create */
-.actions button:first-child {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-}
-
-.actions button:first-child:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-}
-
-/* Close */
-.actions button:last-child {
-  background: #e0e0e0;
-}
-
-.actions button:last-child:hover {
-  background: #d5d5d5;
-}
+/* ===== Subtasks ===== */
 
 .subtasks {
-  margin-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 10px;
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-
-  .subtask {
-    display: flex;
-    gap: 6px;
-
-    input {
-      flex: 1;
-    }
-
-    button {
-      background: #f0f0f0;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  }
-
-  button {
-    margin-top: 4px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-  }
+  gap: 8px;
 }
 
+.subtask {
+  display: flex;
+  gap: 8px;
+}
+
+.subtask input {
+  flex: 1;
+}
+
+.delete-sub {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: none;
+  border-radius: 8px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.delete-sub:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.add-sub {
+  background: rgba(79, 70, 229, 0.15);
+  color: #4f46e5;
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.add-sub:hover {
+  background: rgba(79, 70, 229, 0.25);
+}
+
+/* ===== Footer buttons ===== */
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Secondary */
+.btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Primary (like Contacts) */
+.btn.primary {
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  color: white;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.55);
+}
+
+.btn.primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.45);
+}
