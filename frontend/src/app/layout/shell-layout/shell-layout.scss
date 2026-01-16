@@ -1,3 +1,55 @@
 // .app {
 //    padding: 24px 0 32px;
 //  }
+
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden; 
+  margin-left: 260px;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+
+  /* Scrollbar */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(2, 6, 23, 0.4);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(29, 78, 216, 0.7),
+      rgba(2, 6, 23, 0.7)
+    );
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(29, 78, 216, 0.9),
+      rgba(2, 6, 23, 0.9)
+    );
+  }
+}
+
+

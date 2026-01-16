@@ -1,12 +1,12 @@
 /* ===== Auth Card (dark glassmorphism, как модалка) ===== */
 .auth {
-  max-width: 420px;
+  width: 300px;
   margin: 48px auto;
   padding: 20px 22px;
   background: rgba(15, 23, 42, 0.98); /* как .modal */
   border-radius: 18px;
   border: 1px solid rgba(148, 163, 184, 0.4);
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.85);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.50);
   backdrop-filter: blur(14px);
   color: #e5e7eb; /* базовый цвет текста внутри */
 }

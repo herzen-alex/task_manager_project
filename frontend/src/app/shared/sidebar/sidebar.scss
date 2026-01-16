@@ -1,9 +1,13 @@
 .sidebar {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
   width: 260px;
   min-height: 100vh;
   padding: 24px 18px;
   color: #e5e7eb;
-  // background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%, #020617 100%);
+  background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%, #020617 100%);
   display: flex;
   flex-direction: column;
 }
@@ -114,10 +118,9 @@
 }
 
 .sidebar-secondary {
-  margin-top: 20px;
+  margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid rgba(148, 163, 184, 0.35);
-
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -147,23 +150,3 @@
   opacity: 1;
 }
 
-
-
-
-
-.sidebar-bottom {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(148, 163, 184, 0.35);
-  font-size: 11px;
-  color: #9ca3af;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.user-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: #e5e7eb;
-}

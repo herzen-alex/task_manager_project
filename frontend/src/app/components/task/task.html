@@ -10,36 +10,40 @@
     <app-create-task *ngIf="showCreateTask" (close)="closeCreateTask()" (created)="onTaskCreated($event)">
     </app-create-task>
 
-
     <div class="task-board">
+      <!-- To-Do column -->
       <div class="column" cdkDropList [cdkDropListData]="todoTasks"
         [cdkDropListConnectedTo]="['inProgressList', 'doneList']" (cdkDropListDropped)="drop($event, 'todo')"
         id="todoList">
         <h3>To-Do</h3>
-        <app-task-card *ngFor="let t of todoTasks" cdkDrag [cdkDragData]="t" [task]="t"
-          (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
+
+        <app-task-card class="pos_center" [contacts]="contacts" *ngFor="let t of todoTasks; trackBy: trackByTaskId"
+          cdkDrag [cdkDragData]="t" [task]="t" (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
         </app-task-card>
       </div>
 
+      <!-- In Progress column -->
       <div class="column" cdkDropList [cdkDropListData]="inProgressTasks"
         [cdkDropListConnectedTo]="['todoList', 'doneList']" (cdkDropListDropped)="drop($event, 'in-progress')"
         id="inProgressList">
         <h3>In Progress</h3>
-        <app-task-card *ngFor="let t of inProgressTasks" cdkDrag [cdkDragData]="t" [task]="t"
+
+        <app-task-card class="pos_center" [contacts]="contacts"
+          *ngFor="let t of inProgressTasks; trackBy: trackByTaskId" cdkDrag [cdkDragData]="t" [task]="t"
           (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
         </app-task-card>
       </div>
 
+      <!-- Done column -->
       <div class="column" cdkDropList [cdkDropListData]="doneTasks"
         [cdkDropListConnectedTo]="['todoList', 'inProgressList']" (cdkDropListDropped)="drop($event, 'done')"
         id="doneList">
         <h3>Done</h3>
-        <app-task-card *ngFor="let t of doneTasks" cdkDrag [cdkDragData]="t" [task]="t"
-          (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
+
+        <app-task-card class="pos_center" [contacts]="contacts" *ngFor="let t of doneTasks; trackBy: trackByTaskId"
+          cdkDrag [cdkDragData]="t" [task]="t" (toggleDone)="toggleDone($event)" (delete)="deleteTask($event)">
         </app-task-card>
       </div>
     </div>
-
   </div>
-
 </div>

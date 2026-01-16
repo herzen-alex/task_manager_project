@@ -1,6 +1,8 @@
 .topbar {
+  margin-left: 260px;
+  width: calc(100% - 260px);
   height: 60px;
-  background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%, #020617 100%);
+  background: radial-gradient(circle at top left, #020617 0, #020617 55%, #1d4ed8 100%);
   color: white;
   display: flex;
   align-items: center;

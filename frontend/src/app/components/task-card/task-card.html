@@ -1,6 +1,7 @@
 <div class="task-card" [class.done]="task.done" [ngClass]="task.priority">
 
-  <div class="task-header">
+  <!-- теперь шапка — handle для dnd -->
+  <div class="task-header" cdkDragHandle>
     <div class="task-title-row">
       <h3>{{ task.title }}</h3>
 
@@ -35,10 +36,17 @@
     </li>
   </ul>
 
-  <!-- ➕ Subtask hinzufügen -->
-  <div class="subtask-input" [class.locked]="task.done">
-    <input [(ngModel)]="newSubTaskTitle" placeholder="New subtask" [disabled]="task.done" />
-    <button (click)="addSubTask()" [disabled]="task.done">+</button>
+  <!-- 👥 Assignees (stacked avatars) -->
+  <div class="task-assignees" *ngIf="assigneeChips.length">
+    <div class="avatar-group stacked">
+      <div class="avatar" *ngFor="let chip of assigneeChips | slice:0:5; let i = index"
+        [style.background-color]="chip.color" [title]="chip.initials">
+        {{ chip.initials }}
+      </div>
+      <div class="avatar more-avatar" *ngIf="assigneeChips.length > 5" [title]="'+' + (assigneeChips.length - 5)">
+        +{{ assigneeChips.length - 5 }}
+      </div>
+    </div>
   </div>
 
   <!-- 🔘 Actions -->
@@ -65,6 +73,8 @@
   </div>
 
   <!-- ✨ Modal редактирования -->
-  <app-edit-card *ngIf="isEditing" [task]="task" (close)="closeEdit()" (updated)="onTaskUpdated($event)">
+  <app-edit-card *ngIf="isEditing" [task]="task" [contacts]="contacts" (close)="closeEdit()"
+    (updated)="onTaskUpdated($event)">
   </app-edit-card>
+
 </div>

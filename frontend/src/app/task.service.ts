@@ -1,4 +1,3 @@
-// frontend/src/app/task.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -8,6 +7,14 @@ export interface SubTask {
   id: number;
   title: string;
   done: boolean;
+}
+
+// 🔹 Новый тип — один исполнитель
+export interface TaskAssignee {
+  id: number;
+  name: string;
+  email: string;
+  avatarColor?: string | null;
 }
 
 export interface Task {
@@ -20,6 +27,13 @@ export interface Task {
   dueDate?: Date;
   done: boolean;
   subTasks?: SubTask[];
+
+  // приходит с backend:
+  assignedContacts?: TaskAssignee[];
+
+  // уходим на backend при POST/PUT:
+  assignedContactIds?: number[];
+
   // если бэкенд начнёт отдавать:
   userId?: number;
   user?: { id: number; name: string; email: string };

@@ -16,26 +16,48 @@
 
     <div class="modal-body">
 
-      <input [(ngModel)]="title" placeholder="Title" />
+      <input class="form-control" [(ngModel)]="title" placeholder="Title" />
 
-      <textarea [(ngModel)]="description" placeholder="Description"></textarea>
+      <textarea class="form-control" [(ngModel)]="description" placeholder="Description"></textarea>
 
-      <select [(ngModel)]="priority">
+      <select class="form-control" [(ngModel)]="priority">
         <option value="low">Low Priority</option>
         <option value="medium">Medium Priority</option>
         <option value="urgent">Urgent Priority</option>
       </select>
 
-      <label class="date-field">
+      <div class="field">
+        <span>Assign to</span>
+        <!-- "Закрытый" вид селекта -->
+        <div class="assignee-select" tabindex="0" (click)="toggleAssigneeDropdown($event)"
+          [class.active]="assigneeDropdownOpen">
+          <span class="assignee-select-label" [class.placeholder]="selectedContactIds.length === 0">
+            {{ assigneeSummary }}
+          </span>
+          <span class="chevron">▾</span>
+        </div>
+
+        <!-- Выпадающая панель с чекбоксами (плавающая) -->
+        <div class="assignee-panel" *ngIf="assigneeDropdownOpen" (click)="$event.stopPropagation()">
+          <label class="assignee-item" *ngFor="let c of contacts" [class.selected]="isSelected(c.id!)">
+            <span class="assignee-name">{{ c.name }}</span>
+
+            <input type="checkbox" [checked]="isSelected(c.id!)" (click)="$event.stopPropagation()"
+              (change)="toggleAssignee(c.id!)" />
+          </label>
+        </div>
+      </div>
+
+      <label class="field">
         <span>Due date</span>
-        <input type="date" [(ngModel)]="dueDate" [min]="today" />
+        <input class="form-control" type="date" [(ngModel)]="dueDate" [min]="today" />
       </label>
 
       <div class="subtasks">
         <h4>Subtasks</h4>
 
         <div *ngFor="let sub of subtasks; let i = index" class="subtask">
-          <input [(ngModel)]="sub.title" placeholder="Subtask title" />
+          <input class="form-control" [(ngModel)]="sub.title" placeholder="Subtask title" />
           <button type="button" class="delete-sub" (click)="removeSubtask(i)">✖</button>
         </div>
 

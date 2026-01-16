@@ -1,91 +1,104 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 50;
+  align-items: center;
+  z-index: 1000;
 }
 
+/* ===== Modal Card (light version of Contacts style) ===== */
 .modal {
-  width: 100%;
-  max-width: 520px;
-  background: #f9fafb;
-  border-radius: 20px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
-  padding: 20px 22px;
+  background: #ffffff;
+  padding: 22px;
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* ===== Header ===== */
 .modal-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  align-items: flex-start;
 }
 
 .modal-title-block {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
 }
 
 .modal-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 999px;
+  background: rgba(79, 70, 229, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e0e7ff, #f5f3ff);
   font-size: 20px;
 }
 
 .modal-subtitle {
-  margin: 2px 0 0;
   font-size: 13px;
+  margin-top: 2px;
   color: #6b7280;
 }
 
 .close-btn {
-  border: none;
   background: transparent;
+  border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: #6b7280;
-
-  &:hover {
-    color: #111827;
-  }
+  opacity: 0.65;
+  font-size: 20px;
+  transition: 0.15s;
 }
 
+.close-btn:hover {
+  opacity: 1;
+}
+
+/* ===== Body ===== */
 .modal-body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+}
 
-  input,
-  textarea,
-  select {
-    width: 100%;
-    font-size: 14px;
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    padding: 8px 10px;
-    background: #ffffff;
-  }
+/* базовый стиль для инпутов/селекта/textarea */
+.modal .form-control,
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  // width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  color: #111827;
+  transition: 0.15s ease;
+  outline: none;
+}
 
-  textarea {
-    min-height: 80px;
-    resize: vertical;
-  }
+.modal .form-control:focus,
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
 
-  select {
-    cursor: pointer;
-  }
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .date-field {
@@ -93,94 +106,194 @@
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: #4b5563;
+  color: #6b7280;
 }
 
+/* ===== Subtasks ===== */
 .subtasks {
-  margin-top: 4px;
-
-  h4 {
-    margin: 0 0 6px;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .subtask {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
-
-    input {
-      flex: 1;
-    }
-
-    .delete-sub {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      color: #dc2626;
-      font-size: 14px;
-
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
-  }
-
-  .add-sub {
-    margin-top: 4px;
-    border-radius: 999px;
-    border: none;
-    padding: 6px 12px;
-    font-size: 13px;
-    cursor: pointer;
-    background: rgba(79, 70, 229, 0.08);
-    color: #4f46e5;
-
-    &:hover {
-      background: rgba(79, 70, 229, 0.16);
-    }
-  }
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 10px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
+.subtask {
+  display: flex;
+  gap: 8px;
+}
+
+.subtask input {
+  flex: 1;
+}
+
+.delete-sub {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: none;
+  border-radius: 8px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.delete-sub:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.add-sub {
+  background: rgba(79, 70, 229, 0.15);
+  color: #4f46e5;
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.add-sub:hover {
+  background: rgba(79, 70, 229, 0.25);
+}
+
+/* ===== Footer buttons ===== */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 6px;
+  gap: 10px;
+}
 
-  .btn {
-    border-radius: 999px;
-    padding: 8px 18px;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-  }
+.btn {
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
 
-  .secondary {
-    background: #e5e7eb;
-    color: #374151;
+/* Secondary */
+.btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
 
-    &:hover {
-      background: #d1d5db;
-    }
-  }
+.btn.secondary:hover {
+  background: #e5e7eb;
+}
 
-  .primary {
-    background: linear-gradient(90deg, #4f46e5, #8b5cf6);
-    color: #f9fafb;
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+/* Primary (like Contacts) */
+.btn.primary {
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  color: white;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
 
-    &:hover {
-      box-shadow: 0 10px 24px rgba(79, 70, 229, 0.55);
-      transform: translateY(-1px);
-    }
+.btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.55);
+}
 
-    &:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.45);
-    }
-  }
+.btn.primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.45);
+}
+
+/* ===== Assign to (как в CreateTask) ===== */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #6b7280;
+  position: relative;
+}
+
+.assignee-select {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.65);
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.assignee-select.active {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
+
+.assignee-select-label {
+  font-size: 14px;
+  color: #111827;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assignee-select-label.placeholder {
+  color: #9ca3af;
+}
+
+.chevron {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.assignee-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  max-height: 130px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+  z-index: 20;
+}
+
+.assignee-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* Hover */
+.assignee-item:hover {
+  background: rgba(79, 70, 229, 0.08);
+}
+
+/* Selected state */
+.assignee-item.selected {
+  background: rgba(79, 70, 229, 0.18);
+  font-weight: 600;
+}
+
+.assignee-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assignee-item.selected input {
+  accent-color: #4f46e5;
 }

@@ -4,6 +4,25 @@ import datetime
 
 db = SQLAlchemy()
 
+# 🔗 Ассоциативная таблица many-to-many: Task <-> Contact
+task_assignee = db.Table(
+    "task_assignee",
+    db.Column(
+        "task_id",
+        db.Integer,
+        db.ForeignKey("public.task.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    db.Column(
+        "contact_id",
+        db.Integer,
+        db.ForeignKey("public.contact.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    schema="public",
+)
+
+
 class User(db.Model):
     __tablename__ = "users"
     __table_args__ = {"schema": "public"}
@@ -15,7 +34,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
 
     tasks = db.relationship("Task", back_populates="user", cascade="all, delete-orphan")
-    contacts = db.relationship("Contact", back_populates="user", cascade="all, delete-orphan")  # 👈 НОВОЕ
+    contacts = db.relationship("Contact", back_populates="user", cascade="all, delete-orphan")
 
 
 class Task(db.Model):
@@ -35,11 +54,19 @@ class Task(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
     due_date = db.Column(db.DateTime, nullable=True)
 
-    # ВАЖНО: default=list, а не []
+    # JSON с подзадачами
     sub_tasks = db.Column(JSON, default=list, nullable=False)
 
+    # 🔗 Many-to-many: Task.assignees -> список Contact
+    assignees = db.relationship(
+        "Contact",
+        secondary=task_assignee,
+        back_populates="tasks",
+        lazy="joined",  # можно убрать, если не нужен eager-load
+    )
 
-class Contact(db.Model):  # 👈 НОВАЯ МОДЕЛЬ
+
+class Contact(db.Model):
     __tablename__ = "contact"
     __table_args__ = {"schema": "public"}
 
@@ -63,4 +90,11 @@ class Contact(db.Model):  # 👈 НОВАЯ МОДЕЛЬ
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
         nullable=False,
+    )
+
+    # 🔗 Many-to-many: Contact.tasks -> список Task
+    tasks = db.relationship(
+        "Task",
+        secondary=task_assignee,
+        back_populates="assignees",
     )

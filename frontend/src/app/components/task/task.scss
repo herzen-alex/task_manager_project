@@ -63,3 +63,8 @@ button.add-task:active {
   transform: translateY(0);
   box-shadow: 0 5px 14px rgba(79, 70, 229, 0.4);
 }
+
+.pos_center {
+  display: flex;
+  justify-content: center;
+}

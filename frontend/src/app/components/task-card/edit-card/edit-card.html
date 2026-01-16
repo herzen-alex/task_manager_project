@@ -15,15 +15,34 @@
     </div>
 
     <div class="modal-body">
-      <input [(ngModel)]="title" placeholder="Title" />
+      <input [(ngModel)]="title" class="form-control" placeholder="Title" />
 
-      <textarea [(ngModel)]="description" placeholder="Description"></textarea>
+      <textarea [(ngModel)]="description" class="form-control" placeholder="Description"></textarea>
 
-      <select [(ngModel)]="priority">
+      <select [(ngModel)]="priority" class="form-control">
         <option value="low">Low Priority</option>
         <option value="medium">Medium Priority</option>
         <option value="urgent">Urgent Priority</option>
       </select>
+
+      <!-- 👥 Assign to -->
+      <div class="field">
+        <span>Assign to</span>
+
+        <div class="assignee-select" [class.active]="assigneeDropdownOpen" (click)="toggleAssigneeDropdown($event)">
+          <span class="assignee-select-label" [class.placeholder]="selectedContactIds.length === 0">
+            {{ assigneeSummary }}
+          </span>
+          <span class="chevron">▾</span>
+        </div>
+
+        <div class="assignee-panel" *ngIf="assigneeDropdownOpen" (click)="$event.stopPropagation()">
+          <label class="assignee-item" *ngFor="let c of contacts" [class.selected]="isSelected(c.id!)">
+            <span class="assignee-name">{{ c.name }}</span>
+            <input type="checkbox" [checked]="isSelected(c.id!)" (change)="toggleAssignee(c.id!)" />
+          </label>
+        </div>
+      </div>
 
       <label class="date-field">
         <span>Due date</span>
@@ -35,12 +54,7 @@
 
         <div *ngFor="let sub of subtasks; let i = index" class="subtask">
           <input [(ngModel)]="sub.title" placeholder="Subtask title" />
-          <button
-            type="button"
-            class="delete-sub"
-            (click)="removeSubtask(i)"
-            title="Delete subtask"
-          >
+          <button type="button" class="delete-sub" (click)="removeSubtask(i)" title="Delete subtask">
             ✖
           </button>
         </div>
@@ -61,4 +75,3 @@
     </div>
   </div>
 </div>
-

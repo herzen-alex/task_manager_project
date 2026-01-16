@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models import db, Task, User, Contact  # 👈 добавили Contact
+from .models import db, Task, User, Contact
 
 load_dotenv()
 
@@ -61,6 +61,16 @@ def create_app():
                 "name": t.user.name,
                 "email": t.user.email,
             } if t.user else None,
+            # many-to-many: список исполнителей
+            "assignedContacts": [
+                {
+                    "id": c.id,
+                    "name": c.name,
+                    "email": c.email,
+                    "avatarColor": c.avatar_color,
+                }
+                for c in (t.assignees or [])
+            ],
         }
 
     def _serialize_contact(c: Contact):
@@ -188,6 +198,16 @@ def create_app():
         )
 
         db.session.add(task)
+        db.session.flush()  # чтобы получить task.id до коммита
+
+        # many-to-many: привязка исполнителей (без фильтра по user_id)
+        contact_ids = data.get("assignedContactIds") or []
+        if isinstance(contact_ids, list) and contact_ids:
+            contacts = Contact.query.filter(
+                Contact.id.in_(contact_ids)
+            ).all()
+            task.assignees = contacts
+
         db.session.commit()
 
         task = Task.query.get(task.id)
@@ -227,6 +247,17 @@ def create_app():
 
         if "subTasks" in data:
             task.sub_tasks = data.get("subTasks") or []
+
+        # обновление исполнителей (без фильтра по user_id)
+        if "assignedContactIds" in data:
+            contact_ids = data.get("assignedContactIds") or []
+            if contact_ids:
+                contacts = Contact.query.filter(
+                    Contact.id.in_(contact_ids)
+                ).all()
+                task.assignees = contacts
+            else:
+                task.assignees = []
 
         db.session.commit()
 
@@ -349,4 +380,5 @@ def create_app():
         return jsonify({"message": "Contact deleted"}), 200
 
     return app
+
 
