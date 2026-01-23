@@ -1,7 +1,87 @@
+<div class="max_width">
+  <div class="main-content notes-layout">
+    <div class="notes-header">
+      <div class="notes-header-left">
+        <h1>Notes</h1>
+        <p class="subtitle">Capture ideas, thoughts and quick drafts.</p>
+      </div>
 
-
-    <div class="main-content">
-      <h1>Notes</h1>
-      <p>Notes page (coming soon)</p>
+      <button class="add-task" (click)="newNote()">
+        ✨ New note
+      </button>
     </div>
 
+    <div class="notes-body">
+      <!-- Список заметок слева -->
+      <div class="notes-list">
+        <div class="list-header">
+          <input type="text" placeholder="Search notes (title, content, author)..." [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()" />
+        </div>
+
+        <div class="list-content">
+          <div *ngIf="loading" class="info-text">
+            Loading notes...
+          </div>
+
+          <div *ngIf="!loading && filteredNotes.length === 0" class="info-text">
+            No notes yet. Create your first one! ✨
+          </div>
+
+          <app-notes-card *ngFor="let n of filteredNotes" [note]="n" [selected]="selectedNote?.id === n.id"
+            [authorColor]="getAuthorColor(n)" (select)="selectNote(n)"></app-notes-card>
+
+        </div>
+      </div>
+
+      <!-- Редактор справа -->
+      <div class="notes-editor">
+        <div *ngIf="error" class="error-banner">
+          {{ error }}
+        </div>
+
+        <div class="editor-header">
+          <div class="editor-header-left">
+            <span class="badge" *ngIf="isEditMode">Editing</span>
+            <span class="badge secondary" *ngIf="!isEditMode">New note</span>
+          </div>
+
+          <div class="editor-actions">
+            <button class="btn ghost" type="button" (click)="cancelEdit()">
+              Reset
+            </button>
+
+            <button class="btn danger" type="button" (click)="deleteSelected()" [disabled]="!isEditMode || saving">
+              Delete
+            </button>
+
+            <button class="btn primary" type="button" (click)="saveNote()" [disabled]="saving">
+              {{ isEditMode ? 'Save changes' : 'Create note' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-form">
+          <input type="text" placeholder="Note title" [(ngModel)]="editTitle" />
+
+          <textarea rows="12" placeholder="Write your note here..." [(ngModel)]="editContent"></textarea>
+
+          <div class="editor-footer" *ngIf="selectedNote">
+            <span>
+              Author:
+              {{ selectedNote.user?.name || 'Guest' }}
+            </span>
+            <span>
+              Created:
+              {{ selectedNote.createdAt | date:'dd.MM.yyyy, HH:mm' }}
+            </span>
+            <span>
+              Last update:
+              {{ selectedNote.updatedAt | date:'dd.MM.yyyy, HH:mm' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

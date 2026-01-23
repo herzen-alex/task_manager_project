@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models import db, Task, User, Contact
+from .models import db, Task, User, Contact, Note
+from datetime import timezone
 
 load_dotenv()
 
@@ -91,6 +92,22 @@ def create_app():
                 "email": c.user.email,
             } if c.user else None,
         }
+
+    def _serialize_note(n: Note):
+        return {
+            "id": n.id,
+            "title": n.title,
+            "content": n.content,
+            "createdAt": n.created_at.replace(tzinfo=timezone.utc).isoformat() if n.created_at else None,
+            "updatedAt": n.updated_at.replace(tzinfo=timezone.utc).isoformat() if n.updated_at else None,
+            "userId": n.user_id,
+            "user": {
+                "id": n.user.id,
+                "name": n.user.name,
+                "email": n.user.email,
+            } if n.user else None,
+        }
+
 
     def _parse_due_date(value):
         if not value:
@@ -378,6 +395,91 @@ def create_app():
         db.session.commit()
 
         return jsonify({"message": "Contact deleted"}), 200
+
+
+    # -----------------------------
+    # NOTES: GET — список заметок текущего пользователя
+    @app.route("/notes", methods=["GET"])
+    def get_notes():
+       
+        notes = (
+            Note.query
+            .order_by(Note.updated_at.desc())
+            .all()
+        )
+        return jsonify([_serialize_note(n) for n in notes]), 200
+
+    # -----------------------------
+    # NOTES: POST — создать заметку (нужен X-User-Id)
+    @app.route("/notes", methods=["POST"])
+    def create_note():
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        data = request.get_json() or {}
+
+        title = (data.get("title") or "").strip()
+        content = (data.get("content") or "").strip()
+
+        # Разрешим пустой title, но не разрешим оба поля пустыми
+        if not title and not content:
+            return jsonify({"message": "Title or content is required"}), 400
+
+        note = Note(
+            user_id=user_id,
+            title=title,
+            content=content,
+        )
+
+        db.session.add(note)
+        db.session.commit()
+
+        note = Note.query.get(note.id)
+        return jsonify(_serialize_note(note)), 201
+
+    # -----------------------------
+    # NOTES: PUT — обновить заметку
+    @app.route("/notes/<int:note_id>", methods=["PUT"])
+    def update_note(note_id):
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        note = Note.query.get_or_404(note_id)
+        if note.user_id != user_id:
+            return jsonify({"message": "Note not found"}), 404
+
+        data = request.get_json() or {}
+
+        if "title" in data:
+            note.title = (data.get("title") or "").strip()
+
+        if "content" in data:
+            note.content = (data.get("content") or "").strip()
+
+        db.session.commit()
+
+        note = Note.query.get(note.id)
+        return jsonify(_serialize_note(note)), 200
+
+    # -----------------------------
+    # NOTES: DELETE — удалить заметку
+    @app.route("/notes/<int:note_id>", methods=["DELETE"])
+    def delete_note(note_id):
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        note = Note.query.get_or_404(note_id)
+        if note.user_id != user_id:
+            return jsonify({"message": "Note not found"}), 404
+
+        db.session.delete(note)
+        db.session.commit()
+
+        return jsonify({"message": "Note deleted"}), 200
+
 
     return app
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ColorService } from '../../../color.service';
 
 export type ContactModel = {
   id: number;
@@ -32,6 +33,8 @@ export class EditModal implements OnChanges {
 
   draft: ContactModel | null = null;
 
+  constructor(private colors: ColorService) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOpen && this.contact) {
       this.draft = { ...this.contact };
@@ -59,22 +62,12 @@ export class EditModal implements OnChanges {
   //      AVATAR UTILITIES
   // ===========================
 
-  getAvatarColor(name?: string | null): string {
-    const palette = [
-      '#f97316', '#f59e0b', '#22c55e', '#0ea5e9',
-      '#6366f1', '#ec4899', '#14b8a6', '#a855f7',
-      '#2dd4bf', '#fb7185', '#10b981', '#3b82f6'
-    ];
-
-    // делаем ключ: либо нормализованное имя, либо 'default'
-    const key = (name ?? '').trim() || 'default';
-
-    let hash = 0;
-    for (let i = 0; i < key.length; i++) {
-      hash = key.charCodeAt(i) + ((hash << 5) - hash);
+  getAvatarColor(): string {
+    if (!this.draft) {
+      return this.colors.getColor('contact');
     }
-
-    return palette[Math.abs(hash) % palette.length];
+    const key = this.draft.email || this.draft.name || 'contact';
+    return this.colors.getColor(key);
   }
 
 

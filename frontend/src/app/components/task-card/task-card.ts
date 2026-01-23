@@ -5,6 +5,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Task, SubTask, TaskService, TaskAssignee } from '../../task.service';
 import { EditCard } from './edit-card/edit-card';
 import { Contact } from '../../contact.service';
+import { ColorService } from '../../color.service'; // 🔹 добавили
 
 @Component({
   selector: 'app-task-card',
@@ -24,7 +25,10 @@ export class TaskCard {
   newSubTaskTitle: string = '';
   isEditing = false;
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private colors: ColorService,        // 🔹 добавили
+  ) {}
 
   get canMarkDone(): boolean {
     if (this.task.done) return true;
@@ -104,34 +108,24 @@ export class TaskCard {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
 
-  /** 🎨 Та же логика, что в Contact.getAvatarColor */
-  private getAvatarColor(name?: string | null): string {
-    const palette = [
-      '#f97316', '#f59e0b', '#22c55e', '#0ea5e9',
-      '#6366f1', '#ec4899', '#14b8a6', '#a855f7',
-      '#2dd4bf', '#fb7185', '#10b981', '#3b82f6',
-    ];
-    if (!name) {
-      return palette[Math.floor(Math.random() * palette.length)];
-    }
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return palette[Math.abs(hash) % palette.length];
+  // 🎨 Цвет берём из общего ColorService
+  private getAssigneeColor(a: TaskAssignee): string {
+    const key = (a as any).email || a.name || 'assignee';
+    return this.colors.getColor(key);
   }
 
   /**
    * Массив для *ngFor: initials + цвет на основе имени
    */
-  get assigneeChips(): { initials: string; color: string }[] {
+  get assigneeChips(): { initials: string; color: string; name: string }[] {
     if (!this.assignees.length) return [];
     return this.assignees.map((a) => {
       const name = a.name ?? '';
       const initials = this.getAvatarInitials(name);
-      const color = this.getAvatarColor(name);
-      return { initials, color };
+      const color = this.getAssigneeColor(a);
+      return { initials, color, name };
     });
   }
 }
+
 

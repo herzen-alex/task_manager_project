@@ -13,7 +13,7 @@
 
   <div class="contacts-list">
     <div class="contact-card" *ngFor="let c of contacts">
-      <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(c.name) }">
+      <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(c) }">
         {{ getInitial(c.name) }}
       </div>
 

@@ -26,10 +26,20 @@
     opacity: 0.8;
   }
 
-  .task-header {
+.task-header {
     display: flex;
     flex-direction: column;
     gap: 4px;
+
+    &[cdkDragHandle] {
+      cursor: grab;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    &[cdkDragHandle]:active {
+      cursor: grabbing;
+    }
   }
 
   .task-title-row {
@@ -345,7 +355,6 @@ button.delete-subtask {
 .avatar-group.stacked {
   display: flex;
   align-items: center;
-  /* небольшой отступ слева, чтобы первый кружок не прилипал к краю */
   padding-left: 4px;
 }
 
@@ -367,8 +376,6 @@ button.delete-subtask {
   }
 }
 
-
-/* кружок +N */
 .avatar-group.stacked .more-avatar {
   background: #e5e7eb;
   color: #111827;

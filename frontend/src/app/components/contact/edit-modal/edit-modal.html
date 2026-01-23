@@ -27,7 +27,7 @@
 
             <!-- Аватар превью -->
             <div class="modal-avatar">
-                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(draft.name) }">
+                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor() }">
                     {{ draft.name.trim() ? (draft.name.trim()[0] | uppercase) : '?' }}
                 </div>
             </div>
@@ -65,7 +65,7 @@
             </div>
 
             <div class="contact-card preview">
-                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor(draft.name) }">
+                <div class="avatar" [ngStyle]="{ 'background-color': getAvatarColor() }">
                     {{ draft.name.trim() ? (draft.name.trim()[0] | uppercase) : '?' }}
                 </div>
 

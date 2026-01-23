@@ -37,17 +37,17 @@
   </ul>
 
   <!-- 👥 Assignees (stacked avatars) -->
-  <div class="task-assignees" *ngIf="assigneeChips.length">
-    <div class="avatar-group stacked">
-      <div class="avatar" *ngFor="let chip of assigneeChips | slice:0:5; let i = index"
-        [style.background-color]="chip.color" [title]="chip.initials">
-        {{ chip.initials }}
-      </div>
-      <div class="avatar more-avatar" *ngIf="assigneeChips.length > 5" [title]="'+' + (assigneeChips.length - 5)">
-        +{{ assigneeChips.length - 5 }}
-      </div>
+  <div class="avatar-group stacked">
+    <div class="avatar" *ngFor="let chip of assigneeChips | slice:0:5; let i = index"
+      [style.background-color]="chip.color" [title]="chip.name || chip.initials">
+      {{ chip.initials }}
+    </div>
+
+    <div class="avatar more-avatar" *ngIf="assigneeChips.length > 5" [title]="'+' + (assigneeChips.length - 5)">
+      +{{ assigneeChips.length - 5 }}
     </div>
   </div>
+
 
   <!-- 🔘 Actions -->
   <div class="actions">

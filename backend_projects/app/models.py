@@ -35,6 +35,7 @@ class User(db.Model):
 
     tasks = db.relationship("Task", back_populates="user", cascade="all, delete-orphan")
     contacts = db.relationship("Contact", back_populates="user", cascade="all, delete-orphan")
+    notes = db.relationship("Note", back_populates="user", cascade="all, delete-orphan")
 
 
 class Task(db.Model):
@@ -98,3 +99,33 @@ class Contact(db.Model):
         secondary=task_assignee,
         back_populates="assignees",
     )
+
+class Note(db.Model):
+    __tablename__ = "note"
+    __table_args__ = {"schema": "public"}
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("public.users.id"),
+        nullable=False,
+        index=True,
+    )
+    user = db.relationship("User", back_populates="notes")
+
+    title = db.Column(db.String(200), nullable=False, default="")
+    content = db.Column(db.Text, nullable=False, default="")
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.datetime.utcnow,
+        nullable=False,
+    )
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow,
+        nullable=False,
+    )
+

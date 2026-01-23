@@ -1,0 +1,27 @@
+<div
+  class="note-card"
+  [class.selected]="selected"
+  (click)="onClick()"
+>
+  <div class="note-title">
+    {{ note.title || 'Untitled note' }}
+  </div>
+
+  <div class="note-preview">
+    {{ preview || 'No content yet' }}
+  </div>
+
+  <div class="note-footer">
+    <span class="note-author">
+      <span class="author-dot" [style.background]="authorColor"></span>
+      {{ author }}
+    </span>
+
+    <span class="note-date">
+      {{ note.updatedAt | date:'dd.MM.yyyy, HH:mm' }}
+    </span>
+  </div>
+</div>
+
+
+

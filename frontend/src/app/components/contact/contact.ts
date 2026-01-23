@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { EditModal, ContactModel } from './edit-modal/edit-modal';
 import { ContactService, Contact as ApiContact } from '../../contact.service';
+import { ColorService } from '../../color.service';
 
 @Component({
   selector: 'app-contact',
@@ -22,7 +23,10 @@ export class Contact implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private colors: ColorService
+  ) { }
 
   ngOnInit(): void {
     this.loadContacts();
@@ -46,24 +50,10 @@ export class Contact implements OnInit {
   }
 
     /** 🎨 Цвет аватара на основе имени */
-  getAvatarColor(name?: string | null): string {
-    const palette = [
-      '#f97316', '#f59e0b', '#22c55e', '#0ea5e9',
-      '#6366f1', '#ec4899', '#14b8a6', '#a855f7',
-      '#2dd4bf', '#fb7185', '#10b981', '#3b82f6'
-    ];
-    // если имени нет — просто берём случайный цвет из палитры
-    if (!name) {
-      return palette[Math.floor(Math.random() * palette.length)];
-    }
-    // детерминированный "рандом" на основе строки
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return palette[Math.abs(hash) % palette.length];
+  getAvatarColor(c: ContactModel): string {
+    const key = c.email || c.name || 'contact';
+    return this.colors.getColor(key);
   }
-
 
   getInitial(name?: string | null): string {
     if (!name) return '?';

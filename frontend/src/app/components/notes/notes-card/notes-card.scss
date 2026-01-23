@@ -1,0 +1,66 @@
+.note-card {
+  padding: 8px 10px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  background: rgba(248, 250, 252, 0.92);
+  border: 1px solid transparent;
+  transition: background 0.12s ease, transform 0.06s ease, border-color 0.12s ease,
+    box-shadow 0.12s ease;
+
+  &:hover {
+    background: #ffffff;
+    border-color: rgba(129, 140, 248, 0.6);
+    box-shadow: 0 6px 16px rgba(148, 163, 184, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &.selected {
+    border-color: #6366f1;
+    background: linear-gradient(
+      135deg,
+      rgba(129, 140, 248, 0.12),
+      rgba(236, 252, 203, 0.72)
+    );
+    box-shadow: 0 10px 22px rgba(79, 70, 229, 0.45);
+  }
+
+  .note-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  .note-preview {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+
+  .note-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9ca3af;
+
+    .note-author {
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    .note-date {
+      color: #9ca3af;
+    }
+  }
+}
+
+.author-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  background: #9ca3af;
+  box-shadow: 0 0 0 2px white;
+}
