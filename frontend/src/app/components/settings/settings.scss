@@ -1,0 +1,355 @@
+.test {
+  margin-top: 48px;
+  margin-left: 64px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-nav {
+  position: sticky;
+  top: 12px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+
+  @media (max-width: 900px) {
+    position: relative;
+    top: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  font-weight: 500;
+  text-align: left;
+
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  &.active {
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.9),
+        rgba(59, 130, 246, 0.75));
+    border-color: rgba(96, 165, 250, 0.8);
+    color: #ffffff;
+  }
+
+  &.danger.active {
+    background: linear-gradient(135deg,
+        rgba(220, 38, 38, 0.88),
+        rgba(239, 68, 68, 0.72));
+    border-color: rgba(248, 113, 113, 0.75);
+  }
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  border-radius: 20px;
+  padding: 20px 20px 18px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
+}
+
+.danger-card {
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+.card-head {
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #f8fafc;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 13px;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  @media (max-width: 650px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  input,
+  select {
+    height: 44px;
+    border-radius: 12px;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    outline: none;
+
+    &:focus {
+      border-color: rgba(59, 130, 246, 0.55);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: rgba(248, 250, 252, 0.75);
+    }
+  }
+}
+
+
+.hint {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.status {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13px;
+
+  &.error {
+    color: #f87171;
+  }
+}
+
+.btn {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  &:disabled:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  &.primary {
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.95),
+        rgba(59, 130, 246, 0.85));
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+  }
+
+  &.ghost {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.14);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &.danger {
+    background: linear-gradient(135deg,
+        rgba(220, 38, 38, 0.95),
+        rgba(239, 68, 68, 0.82));
+    border-color: rgba(248, 113, 113, 0.45);
+
+    &.ghost {
+      background: transparent;
+      border-color: rgba(239, 68, 68, 0.35);
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+}
+
+.guest-note {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #fca5a5;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 16px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.mini-title {
+  margin: 0;
+  font-size: 14px;
+  color: #f8fafc;
+}
+
+.mini-desc {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.pass-form {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.foot {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+
+  .sep {
+    opacity: 0.35;
+  }
+}
+
+
+@media (max-width: 1220px) {
+  .test {
+    margin-top: 0;
+    margin-left: 0;
+  }
+}

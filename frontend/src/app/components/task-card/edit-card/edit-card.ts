@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, HostListener} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Task, SubTask, TaskService, TaskAssignee } from '../../../task.service';
-import { Contact } from '../../../contact.service';
+import { Task, SubTask, TaskService, TaskAssignee } from '../../../services/task.service';
+import { Contact } from '../../../services/contact.service';
 
 @Component({
   selector: 'app-edit-card',

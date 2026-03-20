@@ -1,7 +1,158 @@
+<div class="max_width">
 
+  <div class="test">
 
-    <div class="main-content">
-      <h1>Settings</h1>
-      <p>Settings page (coming soon)</p>
+    <div class="settings-header">
+      <div>
+        <h1>Settings</h1>
+        <p>Manage your profile, preferences, and security.</p>
+      </div>
+
+      <button class="btn ghost" type="button" (click)="resetLocal()">
+        Reset local settings
+      </button>
     </div>
 
+    <div class="settings-grid">
+      <!-- Left nav -->
+      <aside class="settings-nav">
+        <button class="nav-item" [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+          <span class="dot"></span>
+          Profile
+        </button>
+
+        <button class="nav-item danger" [class.active]="activeTab === 'account'" (click)="activeTab = 'account'">
+          <span class="dot"></span>
+          Account
+        </button>
+      </aside>
+
+      <!-- Right content -->
+      <section class="settings-content">
+
+        <!-- PROFILE -->
+        <div class="card" *ngIf="activeTab === 'profile'">
+          <div class="card-head">
+            <h2>Profile</h2>
+            <p>Basic info shown across the app.</p>
+          </div>
+
+          <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+            <div class="form-grid">
+              <label class="field">
+                <span>Name</span>
+                <input type="text" name="name" [(ngModel)]="profile.name" placeholder="Your name" required
+                  [disabled]="isGuest" />
+                <small class="hint" *ngIf="isGuest">Guest account name cannot be changed.</small>
+              </label>
+
+              <label class="field">
+                <span>Email</span>
+                <input type="email" name="email" [(ngModel)]="profile.email" placeholder="you@example.com" disabled />
+                <small class="hint">Email is read-only for now.</small>
+              </label>
+            </div>
+
+            <div class="actions">
+              <div class="status" *ngIf="status">{{ status }}</div>
+
+              <button class="btn primary" type="submit" [disabled]="profileForm.invalid || saving || isGuest">
+                {{ saving ? 'Saving...' : 'Save changes' }}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div class="card danger-card" *ngIf="activeTab === 'account'">
+          <div class="card-head">
+            <h2>Account</h2>
+            <p>Security & sign-in actions.</p>
+          </div>
+
+          <div class="danger-zone">
+            <div class="row">
+              <div>
+                <h3 class="mini-title">Change password</h3>
+                <p class="mini-desc">Manage your account password.</p>
+                <p *ngIf="isGuest" class="guest-note">
+                  Guest account password cannot be changed.
+                </p>
+              </div>
+
+              <button class="btn ghost" type="button" (click)="openPassword = !openPassword" [disabled]="isGuest">
+                {{ openPassword ? 'Close' : 'Open' }}
+              </button>
+            </div>
+
+            <form *ngIf="openPassword" (ngSubmit)="changePassword()" #passForm="ngForm" class="pass-form">
+              <label class="field">
+                <span>Current password</span>
+                <input type="password" name="current" [(ngModel)]="password.current" required [disabled]="isGuest" />
+              </label>
+
+              <label class="field">
+                <span>New password</span>
+                <input type="password" name="next" [(ngModel)]="password.next" minlength="6" required
+                  [disabled]="isGuest" />
+              </label>
+
+              <label class="field">
+                <span>Confirm new password</span>
+                <input type="password" name="confirm" [(ngModel)]="password.confirm" minlength="6" required
+                  [disabled]="isGuest" />
+              </label>
+
+              <div class="actions">
+                <div class="status error" *ngIf="passError">{{ passError }}</div>
+                <div class="status" *ngIf="passOk">{{ passOk }}</div>
+
+                <button class="btn primary" type="submit" [disabled]="passForm.invalid || savingPass || isGuest">
+                  {{ savingPass ? 'Updating...' : 'Update password' }}
+                </button>
+              </div>
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="row">
+              <div>
+                <h3 class="mini-title">Logout</h3>
+                <p class="mini-desc">End your current session.</p>
+              </div>
+
+              <button class="btn danger" type="button" (click)="logout()">
+                Logout
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="row">
+              <div>
+                <h3 class="mini-title">Delete account</h3>
+                <p class="mini-desc">This action permanently removes your account.</p>
+                <p *ngIf="isGuest" class="guest-note">
+                  Guest account cannot be deleted.
+                </p>
+              </div>
+
+              <button class="btn danger" type="button" (click)="deleteAccount()" [disabled]="isGuest">
+                Delete account
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer small info -->
+        <div class="foot">
+          <span>Task Manager UI</span>
+          <span class="sep">•</span>
+          <span>Settings</span>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+</div>

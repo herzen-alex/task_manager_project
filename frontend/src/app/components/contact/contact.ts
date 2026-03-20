@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { EditModal, ContactModel } from './edit-modal/edit-modal';
-import { ContactService, Contact as ApiContact } from '../../contact.service';
-import { ColorService } from '../../color.service';
+import { ContactService, Contact as ApiContact } from '../../services/contact.service';
+import { ColorService } from '../../services/color.service';
 
 @Component({
   selector: 'app-contact',

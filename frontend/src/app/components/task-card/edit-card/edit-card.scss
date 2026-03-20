@@ -12,14 +12,26 @@
 .modal {
   background: #ffffff;
   padding: 22px;
-  width: 420px;
   max-width: calc(100vw - 32px);
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: 500px;
+  width: auto;
+  overflow: auto;
+
+  /* Scrollbar */
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #f6f7f8;
+  }
 }
 
 /* ===== Header ===== */

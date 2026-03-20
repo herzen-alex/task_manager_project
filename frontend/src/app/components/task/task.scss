@@ -4,6 +4,32 @@
   margin-top: 20px;
 }
 
+.column {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.column-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.column-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-card-item {
+  display: block;
+}
+
 h1 {
   text-align: center;
   font-size: 40px;
@@ -27,16 +53,6 @@ h3 {
     text-transform: uppercase;
     color: #9ca3af;
   }
-}
-
-.column {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 button.add-task {
@@ -64,7 +80,60 @@ button.add-task:active {
   box-shadow: 0 5px 14px rgba(79, 70, 229, 0.4);
 }
 
-.pos_center {
-  display: flex;
-  justify-content: center;
+@media (max-width: 1020px) {
+  .task-board {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .column {
+    width: 100%;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .column-head {
+    margin-bottom: 8px;
+  }
+
+  .column-head h3 {
+    text-align: left;
+    margin: 0;
+  }
+
+  .column-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(2, 6, 23, 0.08);
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        90deg,
+        rgba(79, 70, 229, 0.8),
+        rgba(139, 92, 246, 0.8)
+      );
+      border-radius: 10px;
+    }
+  }
+
+  .task-card-item {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
 }

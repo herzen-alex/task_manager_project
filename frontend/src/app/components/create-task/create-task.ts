@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ContactService, Contact as ApiContact } from '../../contact.service';
-import { SubTask, Task, TaskAssignee } from '../../task.service';
+import { ContactService, Contact as ApiContact } from '../../services/contact.service';
+import { SubTask, Task, TaskAssignee } from '../../services/task.service';
 
 @Component({
   selector: 'app-create-task',

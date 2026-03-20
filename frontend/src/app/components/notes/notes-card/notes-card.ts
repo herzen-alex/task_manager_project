@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Note } from '../../../notes.service';
+import { Note } from '../../../services/notes.service';
 
 @Component({
   selector: 'app-notes-card',

@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Task, SubTask, TaskService, TaskAssignee } from '../../task.service';
+import { Task, SubTask, TaskService, TaskAssignee } from '../../services/task.service';
 import { EditCard } from './edit-card/edit-card';
-import { Contact } from '../../contact.service';
-import { ColorService } from '../../color.service'; // 🔹 добавили
+import { Contact } from '../../services/contact.service';
+import { ColorService } from '../../services/color.service';
 
 @Component({
   selector: 'app-task-card',

@@ -11,7 +11,7 @@
 
 /* сама карточка модалки */
 .modal {
-  width: 100%;
+  width: auto;
   max-width: 480px;
   background: rgba(15, 23, 42, 0.98);
   border-radius: 18px;
@@ -20,6 +20,17 @@
   padding: 18px 20px 16px;
   backdrop-filter: blur(14px);
   color: #e5e7eb;
+  height: 500px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #f6f7f8;
+  }
 }
 
 /* заголовок */
@@ -166,7 +177,8 @@
   font-weight: 600;
   font-size: 18px;
   color: #f9fafb;
-  background: #4f46e5; /* будет перекрыт getAvatarColor */
+  background: #4f46e5;
+  /* будет перекрыт getAvatarColor */
   flex-shrink: 0;
 }
 

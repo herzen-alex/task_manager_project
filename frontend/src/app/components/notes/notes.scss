@@ -45,7 +45,8 @@
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* содержимое скроллится внутри */
+  overflow: hidden;
+  /* содержимое скроллится внутри */
 }
 
 .list-header {
@@ -84,7 +85,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow: hidden; /* содержимое скроллится внутри */
+  overflow: hidden;
+  /* содержимое скроллится внутри */
 }
 
 .editor-header {
@@ -284,25 +286,55 @@ button.add-task:active {
   }
 
   &::-webkit-scrollbar-track {
-    background: transparent;      // 🔥 теперь нет серой балки
+    background: transparent; // 🔥 теперь нет серой балки
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      180deg,
-      rgba(29, 78, 216, 0.7),
-      rgba(2, 6, 23, 0.7)
-    );
+    background: linear-gradient(180deg,
+        rgba(29, 78, 216, 0.7),
+        rgba(2, 6, 23, 0.7));
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.2s ease;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-      180deg,
-      rgba(29, 78, 216, 0.9),
-      rgba(2, 6, 23, 0.9)
-    );
+    background: linear-gradient(180deg,
+        rgba(29, 78, 216, 0.9),
+        rgba(2, 6, 23, 0.9));
+  }
+}
+
+
+@media (max-width: 1220px) {
+  .notes-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .notes-body {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px);
+  }
+}
+
+@media (max-width: 510px) {
+  .notes-header {
+    flex-direction: column;
+    align-items: normal;
+  }
+
+  .editor-header {
+    flex-direction: column;
+  }
+
+  .btn {
+    padding: 6px 10px;
   }
 }

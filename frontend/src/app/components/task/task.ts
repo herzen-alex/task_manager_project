@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TaskService, Task } from '../../task.service';
+import { TaskService, Task } from '../../services/task.service';
 import { CreateTaskComponent } from '../create-task/create-task';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TaskCard } from '../task-card/task-card';
-import { ContactService, Contact } from '../../contact.service';
+import { ContactService, Contact } from '../../services/contact.service';
 
 @Component({
   selector: 'app-task',
@@ -21,14 +21,12 @@ export class TaskComponent implements OnInit {
   doneTasks: Task[] = [];
   contacts: Contact[] = [];
   showCreateTask = false;
-
-  // 🔥 флаг: открыта ли где-то модалка редактирования
   isEditOpen = false;
 
   constructor(
     private taskService: TaskService,
     private contactService: ContactService,
-  ) {}
+  ) { }
 
   trackByTaskId(index: number, task: Task): string | number {
     return task.id ?? index;
@@ -110,10 +108,9 @@ export class TaskComponent implements OnInit {
   drop(event: CdkDragDrop<Task[]>, status: 'todo' | 'in-progress' | 'done') {
     const task = event.item.data as Task;
     if (!task || !task.id) return;
-
+    const previousStatus = task.status || 'todo';
     const mainTask = this.tasks.find(t => t.id === task.id);
     if (mainTask) mainTask.status = status;
-
     if (event.previousContainer !== event.container) {
       transferArrayItem(
         event.previousContainer.data,
@@ -124,14 +121,13 @@ export class TaskComponent implements OnInit {
     } else {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     }
-
     this.taskService.updateTask(task.id, { status }).subscribe({
-      next: () => {},
+      next: () => { },
       error: () => {
         if (mainTask) {
-          mainTask.status = event.previousContainer.id as any;
-          this.updateColumns();
+          mainTask.status = previousStatus;
         }
+        this.updateColumns();
       },
     });
   }

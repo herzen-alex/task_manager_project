@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ColorService } from '../../../color.service';
+import { ColorService } from '../../../services/color.service';
 
 export type ContactModel = {
   id: number;

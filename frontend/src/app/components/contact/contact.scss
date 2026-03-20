@@ -125,3 +125,18 @@
 }
 
 
+
+@media (max-width: 1220px) {
+  .contacts-page {
+    margin-top: 8px;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 415px) {
+  .contacts-header {
+    flex-direction: column;
+    gap: 24px;
+    align-items: normal;
+  }
+}

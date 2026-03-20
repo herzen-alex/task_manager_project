@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NotesService, Note } from '../../notes.service';
+import { NotesService, Note } from '../../services/notes.service';
 import { NotesCard } from './notes-card/notes-card';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../services/color.service';
 
 @Component({
   selector: 'app-notes',

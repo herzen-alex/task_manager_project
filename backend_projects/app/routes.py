@@ -14,8 +14,20 @@ def create_app():
     app = Flask(__name__)
 
     # -----------------------------
-    # CORS — разрешаем Angular
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    # CORS Angular
+    CORS(
+        app,
+        resources={
+            r"/*": {
+                "origins": [
+                    "http://localhost:4200",
+                    "http://127.0.0.1:4200",
+                ]
+            }
+        },
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type", "X-User-Id"],
+    )
 
     # -----------------------------
     # PostgreSQL
@@ -62,7 +74,6 @@ def create_app():
                 "name": t.user.name,
                 "email": t.user.email,
             } if t.user else None,
-            # many-to-many: список исполнителей
             "assignedContacts": [
                 {
                     "id": c.id,
@@ -124,7 +135,7 @@ def create_app():
             raise
 
     # -----------------------------
-    # HEALTH CHECK (для CI / Docker)
+    # HEALTH CHECK (CI / Docker)
     @app.route("/health", methods=["GET"])
     def health():
         return jsonify({"status": "ok"}), 200
@@ -181,16 +192,139 @@ def create_app():
             "name": user.name,
             "email": user.email,
         }), 200
+    
+        # -----------------------------
+    # SETTINGS / ME: GET
+    @app.route("/me", methods=["GET", "OPTIONS"])
+    def get_me():
+        if request.method == "OPTIONS":
+            return "", 200
+
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        return jsonify({
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "createdAt": user.created_at.isoformat() if user.created_at else None,
+        }), 200
 
     # -----------------------------
-    # TASKS: GET — все задачи (пока общая доска)
+# SETTINGS / ME: PUT
+    @app.route("/me", methods=["PUT", "OPTIONS"])
+    def update_me():
+        if request.method == "OPTIONS":
+            return "", 200
+
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+    # 🚫 guest
+        if user.email == "guest@example.com":
+            return jsonify({"message": "Guest account cannot be updated"}), 403
+
+        data = request.get_json() or {}
+
+        if "name" in data:
+            new_name = (data.get("name") or "").strip()
+            if not new_name:
+                return jsonify({"message": "Name cannot be empty"}), 400
+            user.name = new_name
+
+        db.session.commit()
+
+        return jsonify({
+            "message": "Profile updated successfully",
+            "user": {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "createdAt": user.created_at.isoformat() if user.created_at else None,
+            }
+        }), 200
+
+    # -----------------------------
+# SETTINGS / ME/PASSWORD: PUT
+    @app.route("/me/password", methods=["PUT", "OPTIONS"])
+    def update_my_password():
+        if request.method == "OPTIONS":
+            return "", 200
+
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+    # 🚫 guest
+        if user.email == "guest@example.com":
+            return jsonify({"message": "Guest account password cannot be changed"}), 403
+
+        data = request.get_json() or {}
+
+        current_password = data.get("current_password") or ""
+        new_password = data.get("new_password") or ""
+
+        if not current_password or not new_password:
+            return jsonify({"message": "Current password and new password are required"}), 400
+
+        if not check_password_hash(user.password_hash, current_password):
+            return jsonify({"message": "Current password is incorrect"}), 400
+
+        if len(new_password) < 6:
+            return jsonify({"message": "New password must be at least 6 characters long"}), 400
+
+        user.password_hash = generate_password_hash(new_password)
+        db.session.commit()
+
+        return jsonify({"message": "Password updated successfully"}), 200
+    
+        # -----------------------------
+    # SETTINGS / ME: DELETE
+    @app.route("/me", methods=["DELETE", "OPTIONS"])
+    def delete_me():
+        if request.method == "OPTIONS":
+            return "", 200
+
+        user_id = _get_user_id()
+        if not user_id:
+            return jsonify({"message": "Missing or invalid X-User-Id header"}), 401
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+    # 🚫  guest
+        if user.email == "guest@example.com":
+            return jsonify({"message": "Guest account cannot be deleted"}), 403
+
+        db.session.delete(user)
+        db.session.commit()
+
+        return jsonify({"message": "Account deleted successfully"}), 200
+
+    # -----------------------------
+    # TASKS: GET
     @app.route("/tasks", methods=["GET"])
     def get_tasks():
         tasks = Task.query.order_by(Task.created_at.desc()).all()
         return jsonify([_serialize_task(t) for t in tasks]), 200
 
     # -----------------------------
-    # TASKS: POST — создать задачу (нужен X-User-Id)
+    # TASKS: POST  ( X-User-Id)
     @app.route("/tasks", methods=["POST"])
     def add_task():
         user_id = _get_user_id()
@@ -215,9 +349,8 @@ def create_app():
         )
 
         db.session.add(task)
-        db.session.flush()  # чтобы получить task.id до коммита
+        db.session.flush()
 
-        # many-to-many: привязка исполнителей (без фильтра по user_id)
         contact_ids = data.get("assignedContactIds") or []
         if isinstance(contact_ids, list) and contact_ids:
             contacts = Contact.query.filter(
@@ -231,7 +364,7 @@ def create_app():
         return jsonify(_serialize_task(task)), 201
 
     # -----------------------------
-    # TASKS: PUT — обновить задачу
+    # TASKS: PUT
     @app.route("/tasks/<int:task_id>", methods=["PUT"])
     def update_task(task_id):
         user_id = _get_user_id()
@@ -265,7 +398,6 @@ def create_app():
         if "subTasks" in data:
             task.sub_tasks = data.get("subTasks") or []
 
-        # обновление исполнителей (без фильтра по user_id)
         if "assignedContactIds" in data:
             contact_ids = data.get("assignedContactIds") or []
             if contact_ids:
@@ -282,7 +414,7 @@ def create_app():
         return jsonify(_serialize_task(task)), 200
 
     # -----------------------------
-    # TASKS: DELETE — удалить задачу
+    # TASKS: DELETE
     @app.route("/tasks/<int:task_id>", methods=["DELETE"])
     def delete_task(task_id):
         user_id = _get_user_id()
@@ -296,22 +428,21 @@ def create_app():
         return jsonify({"message": "Task deleted"}), 200
 
     # -----------------------------
-    # CONTACTS: GET — список контактов
+    # CONTACTS: GET
     @app.route("/contacts", methods=["GET"])
     def get_contacts():
-        # пока без фильтра по пользователю, общая адресная книга
         contacts = Contact.query.order_by(Contact.name.asc()).all()
         return jsonify([_serialize_contact(c) for c in contacts]), 200
 
     # -----------------------------
-    # CONTACTS: GET — один контакт по id
+    # CONTACTS: GET
     @app.route("/contacts/<int:contact_id>", methods=["GET"])
     def get_contact(contact_id):
         contact = Contact.query.get_or_404(contact_id)
         return jsonify(_serialize_contact(contact)), 200
 
     # -----------------------------
-    # CONTACTS: POST — создать контакт (нужен X-User-Id)
+    # CONTACTS: POST (X-User-Id)
     @app.route("/contacts", methods=["POST"])
     def create_contact():
         user_id = _get_user_id()
@@ -343,7 +474,7 @@ def create_app():
         return jsonify(_serialize_contact(contact)), 201
 
     # -----------------------------
-    # CONTACTS: PUT — обновить контакт
+    # CONTACTS: PUT
     @app.route("/contacts/<int:contact_id>", methods=["PUT"])
     def update_contact(contact_id):
         user_id = _get_user_id()
@@ -383,7 +514,7 @@ def create_app():
         return jsonify(_serialize_contact(contact)), 200
 
     # -----------------------------
-    # CONTACTS: DELETE — удалить контакт
+    # CONTACTS: DELETE
     @app.route("/contacts/<int:contact_id>", methods=["DELETE"])
     def delete_contact(contact_id):
         user_id = _get_user_id()
@@ -398,7 +529,7 @@ def create_app():
 
 
     # -----------------------------
-    # NOTES: GET — список заметок текущего пользователя
+    # NOTES: GET
     @app.route("/notes", methods=["GET"])
     def get_notes():
        
@@ -410,7 +541,7 @@ def create_app():
         return jsonify([_serialize_note(n) for n in notes]), 200
 
     # -----------------------------
-    # NOTES: POST — создать заметку (нужен X-User-Id)
+    # NOTES: POST (X-User-Id)
     @app.route("/notes", methods=["POST"])
     def create_note():
         user_id = _get_user_id()
@@ -422,7 +553,6 @@ def create_app():
         title = (data.get("title") or "").strip()
         content = (data.get("content") or "").strip()
 
-        # Разрешим пустой title, но не разрешим оба поля пустыми
         if not title and not content:
             return jsonify({"message": "Title or content is required"}), 400
 
@@ -439,7 +569,7 @@ def create_app():
         return jsonify(_serialize_note(note)), 201
 
     # -----------------------------
-    # NOTES: PUT — обновить заметку
+    # NOTES: PUT
     @app.route("/notes/<int:note_id>", methods=["PUT"])
     def update_note(note_id):
         user_id = _get_user_id()
@@ -464,7 +594,7 @@ def create_app():
         return jsonify(_serialize_note(note)), 200
 
     # -----------------------------
-    # NOTES: DELETE — удалить заметку
+    # NOTES: DELETE
     @app.route("/notes/<int:note_id>", methods=["DELETE"])
     def delete_note(note_id):
         user_id = _get_user_id()
@@ -479,7 +609,6 @@ def create_app():
         db.session.commit()
 
         return jsonify({"message": "Note deleted"}), 200
-
 
     return app
 
